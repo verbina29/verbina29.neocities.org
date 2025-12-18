@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>how to edit text in Style Savvy 3 - verbina29's... Blog?</title>
+    <meta content="how to edit text in Style Savvy: Fashion Forward" property="og:title" />
+    <meta content="look i'm not putting all the names this game has here the title says it all" property="og:description" />
+    <meta content="https://verbina29.neocities.org/articles/styleSavvyModding.html" property="og:url" />
+    <meta content="https://verbina29.neocities.org/articles/styleSavvyModding/thumbnail.png" property="og:image" />
+    <meta property="og:type" content="article" />
+    <meta property="og:article:published_time" content="12-18-25" />
+    <meta property="og:article:modified_time" content="12-18-25" />
+    <meta property="og:article:author" content="verbina29" />
+    <meta property="og:article:section" content="Style Savvy" />
+    <meta property="og:article:tag" content="reverse engineering, video game modding, 3DS, text editing, woke!!!, style savvy fashion forward, girls mode 3 kirakira code, new style boutique 2 fashion forward, style savvy 3" />
+    <meta content="#B60000" data-react-helmet="true" name="theme-color" />
+    <link rel="shortcut icon" href="https://verbina29.neocities.org/favicon.ico">
+
+    <link href="../theme_neo/neo.css" rel="stylesheet" type="text/css" media="all">
+  </head>
+  <body>
+    <header><h1>how I edited text in Style Savvy 3</h1></header>
+    <nav><iframe class="navFrame" src="../navbar.html"></iframe></nav>
+
+    <article>
+      <h2>background</h2>
+
+      <p>
+        okay so basically i just got really pissed about the game calling you a woman and i, in my eternal naïveté, thought, "surely it can't be that hard to edit some text". oh you sweet summer child, past me. all of the tools for this aren't linux-native and are kind of terrible. this has been much pain and suffering. but hey now parts of the game no longer call me a woman. i'll release this gender-neutrality mod eventually but there are like 5k text files in this game and there is no good program right now to mass-edit. if i want to change all instances of a word i have to go through every single file individually. this shit fucking sucks. i don't know shit about reverse engineering, game modding, or whatever the hell these filetypes are, but it is my god-sent duty to make this fashion game targeted towards young girls woke and by god am i willing to learn to make that happen.
+      </p>
+
+      <h2>okay here's how i did it basically</h2>
+
+      <p>
+        and i did check to make sure all of this is reproducible because i didn't initially document my process, specifically so that i could write a blog post eventually! this general process probably works for some other games but i haven't tested because idc about those games. just like cut out the steps about ELPKs or CPKs if it's not a game that uses archives like that. also i'm on linux so i used all of these programs via Wine (well really Bottles bc im lazy). also i don't know what i'm doing if this explodes your computer you can't sue me.
+      </p>
+      <p>
+        Sequences using ==> arrows are exact lists of the buttons to click on.
+      </p>
+
+      <h3>prerequisites</h3>
+
+      <ol>
+        <li>Legally obtain a backup copy of the game. For legal reasons, I do not endorse pirating video games, but I'm sure we all know what that really means.</li>
+        <li>Configure the emulator of your choice. I'm using Azahar, but other Citra forks should be basically the same.</li>
+        <li>Set up the game in said emulator.</li>
+        <li>If on <span class="hoverable" title="God help us all.">Linux</span> (or like a Mac I guess but that's worse), configure Wine or Bottles or something so that you can run Windows programs.</li>
+        <li><a href="https://github.com/wmltogether/CriPakTools/releases">CriPakTools/CriPakGUI</a></li>
+        <li><a href="https://github.com/Ret-HZ/rELPKckr/releases">rELPKckr</a></li>
+        <li><a href="https://github.com/IcySon55/Kuriimu/releases">Kuriimu</a>. Kuriimu 1, not Kuriimu2. I couldn't get Kuriimu2 to work, so no idea if it's better or not.</li>
+        <li><a href="https://github.com/mosamadeeb/CpkPatcher">CpkPatcher</a></li>
+        <li>A hex editor. I've been using <a href="https://imhex.werwolv.net/">ImHex</a> but I don't know shit no idea if this one's any good it has dark mode and seemed to have the most features when i was looking for one.</li>
+        <li>Know how to open a terminal.</li>
+        <li>(Optional, but highly recommended.) <a href="https://ugrep.com/">ugrep</a></li>
+      </ol>
+
+      <h3>OKAY HERE'S THE REAL INSTRUCTIONS</h3>
+
+      <ol>
+        <li>Dump the game's RomFS. In Azahar, this is simply right clicking on the game in the game list and clicking "Dump RomFS", and it automatically opens up the dumped RomFS for you. If you're modding the English version of the game, you likely want the EN folder, but for other languages you'll want the appropriate folder.</li>
+        <li>You will notice that all of the files are <code>.cpk</code>. Extract these using CriPakGUI.
+          <ol>
+            <li>Open CriPakGUI.</li>
+            <li>File ==> Open CPK</li>
+            <li>Navigate to wherever you put your CPK files or the RomFS dump and open the CPK you want to extract.</li>
+            <li>Click "Extract Files"</li>
+            <li>Navigate to wherever you want the extracted files and open that location.</li>
+            <li>Wait patiently.</li>
+          </ol>
+        <li>Open whatever folder you extracted them to.</li>
+        <li>Figure out what type of file these really are, using your hex editor. ELPK files will conveniently start with <code>ELPK</code> in ASCII, while MSBT files will conveniently start with <code>MsgStdBn</code> in ASCII. Convenient!</li>
+          <ul>
+            <li>If it's an ELPK, extract it via rELPKckr, using the command <code>wine rELPKckr.exe file</code>, replacing "file" with the filename of the ELPK file. If you're on windows just like, remove the wine part, figure it out yourself i'm too sexy to use windows in 2025.</li>
+            <li>The extracted ELPK should contain MSBT files, so you can proceed to the next step.
+          </ul>
+        <li>To more easily find the files you want to edit, you can run the command <code>ugrep --encoding=UTF-16LE -r "search" --exclude=*.bak</code>, replacing "search" (keeping it in the quotes) with a term from the file you want to edit. Or suffer manually looking through 5k text files, I'm not going to tell you how to live. The <code>--exclude=*.bak</code> part excludes the .bak files that Kuriimu creates so that you won't get the unedited versions if you're replacing a specific word or something.</li>
+        <li>Because Kuriimu only can edit files with specifically the <code>.msbt</code> extension, you'll need to rename the <code>.msgs</code> files to <code>.msbt</code>.
+        <li>Edit the <code>.msbt</code> files using Kuriimu.
+          <ol>
+            <li>Navigate to your <code>.msbt</code> files and open them.</li>
+            <li>Look, it's a text editor, I'm sure you can figure it out on your own.</li>
+            <li>There is no god that can help you if you want to edit the formatting.</li>
+            <li>Click the save icon in the top bar to save after you're done editing the text.</li>
+          </ol>
+        <li>Rename the <code>.msbt</code> files back to whatever they were before.</li>
+        <li>If applicable, repack the ELPK file using rELPKckr. This is just <code>wine rELPKckr.exe folder</code>, replacing "folder" with the name of the folder rELPKckr unpacked the ELPK to.</li>
+        <li>Patch the CPK file using CpkPatcher.</li>
+          <ol>
+            <li>Put your edited MSBT or ELPK in a folder with structure mirroring that of the CPK file. So if the CPK file has directories like <code>whatever.cpk/msbt/fileIwantToEdit</code>, you'd need a directory like <code>patch/msbt/fileIwantToEdit</code>, with the "patch" directory containing only the files you want to edit and the folders that those are contained in.</li>
+            <li>Run <code>wine CpkPatcher.exe sourceCPK patchDir outputCPK</code>, replacing "sourceCPK" with the original, unedited CPK file, "patchDir" with the directory mirroring the CPK file's structure, and outputCPK with the filename and path to output to.</li>
+          </ol>
+        <li>Right click the game, then press Mods Location under the Open menu.</li>
+        <li>Create a folder called <code>romfs</code>, and put your patched CPKs in it, mirroring the directory structure of the RomFS dump. For Style Savvy: Fashion Forward's US version's English language, this would be <code>romfs/USA/EN</code>.</li>
+        <li>Launch the game and hope it works.</li>
+      </ol>
+
+    <h2>if you came for fun technical details about this game or my gender neutrality mod sorry this is just documentation for my hellworkflow for now. and the rest of this is basically a rant</h2>
+      <p>
+        i do love reading obscure technical details about video games too but i am not much of a programmer or reverse-engineer and most of the work on MSBT is already done. it's great that there are tools for this i just wish they were better and linux-native and easier to edit arbitrary formatting with. and because these tools are kind of bad (at least for this specific game. i don't want to deny that lots of effort went into making all of these programs, and i sincerely appreciate the work of all of the developers, reverse-engineers, and modders that worked to create these programs. they just don't seem to work well with my workflow, and that's fine!), it's going to take a while to go through all five thousand text files (that's text <i>files</i>! there are multiple lines per text file!) and go through all the text. and Azahar doesn't really have good tools for debugging, so it's not like i can force it to load some piece of text, i have to go edit the text and then patch the file and then put it in the mod folder and then open the game and then find a place in the game where i can see that text (and a lot of the text in this game isn't easily reproducible) if i want to make sure that i didn't break the text.
+      </p>
+    <h2>anyway here's just the funny shit i said while figuring all of this out</h2>
+      <p>did you know that Noor is white in the japanese version for some reason. isn't that fucked up. i just feel like i have to share that. anyway <a href="https://app.wafrn.net/fediverse/post/a253dd55-669a-4579-843d-cde87d488d0b">here's</a> the start of my wafrn thread about this if you want to see my public liveposting.</p>
+
+      <div class="gallery">
+        <figure>
+          <a href="styleSavvyModding/clueless.png"><img src="styleSavvyModding/clueless.png" alt="Discord screenshot of me, saying &quot;hm i wonder how hard it'd be to make a gender neutral player mod for style savvy fashion forward&quot;"></a>
+          <figcaption>past me was so innocent. <a href="styleSavvyModding/clueless.png" class="hint">Click for full size!</a>
+        </figure>
+        <figure>
+          <a href="styleSavvyModding/well.png"><img src="styleSavvyModding/well.png" alt="A screenshot of Style Savvy: Fashion Forward's title screen where Sophie is half inside of the door, and the yes/no prompt on the bottom screen reads '!!Undefined String!!'"></a>
+          <figcaption>the first step in modding a game is breaking everything <a href="styleSavvyModding/well.png" class="hint">Click for full size!</a>
+        </figure>
+        <figure>
+          <a href="styleSavvyModding/correction.png"><img src="styleSavvyModding/correction.png" alt='Discord screenshot of me replying to myself. The first message says "hm. does my mod crash the game now.", and the message replying to it says "actually, correction: it crashes the emulator."'></a>
+          <figcaption>yeah i don't have a funny caption for this one this is just how it is <a href="styleSavvyModding/correction.png" class="hint">Click for full size!</a>
+        </figure>
+        <figure>
+          <a href="styleSavvyModding/keysmash.png"><img src="styleSavvyModding/keysmash.png" alt='A screenshot of Style Savvy: Fashion Forward where the Fashion 101 entry for the A-Line hairstyle has been edited to say "hi i can edit text"'></a>
+          <figcaption>editing this text is actually more of a pain in the ass than the rest of the text but its what i started with <a href="styleSavvyModding/keysmash.png" class="hint">Click for full size!</a>
+        </figure>
+        <figure>
+          <a href="styleSavvyModding/liveCPKreaction.png"><img src="styleSavvyModding/liveCPKreaction.png" alt="A screenshot of CriPakGUI's CPK patching window, with a red bar behind it that reads &quot;LIVE CPK REACTION&quot;, like the LIVE SLUG REACTION meme."></a>
+          <figcaption><a href="styleSavvyModding/liveCPKreactionPaint.png">this is actually a paint window behind the CriPakGUI window.</a> i just left this on my desktop for several hours before realizing that CriPakGUI's patcher has a memory leak or something and was using 10 gigs of ram to patch the like 4k file CPK. <a href="styleSavvyModding/liveCPKreaction.png" class="hint">Click for full size!</a>
+        </figure>
+      </div>
+
+  </body>
+</html>
