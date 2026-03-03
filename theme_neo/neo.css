@@ -59,6 +59,9 @@
     --perimaPink: #f88dff;
     --twoTeal: #6c93b7;
     --twoPurple: #211838;
+    --yvikRed: #a32626;
+    --sierraBlue: #8da9cc;
+    --alvarusGreen: #a8b758;
 }
 
 /* Basic Layout */
@@ -280,6 +283,7 @@ dl {
     position: relative;
     margin-bottom: 0;
     background-color: var(--backgroundTertiary);
+    clear: left;
 }
 dt {
     text-align: center;
@@ -594,6 +598,9 @@ code {
 }
 .manaweavers {
     --frameColor: var(--twoTeal);
+}
+.kakogenzaimirai {
+    --frameColor: var(--sierraBlue);
 }
 
 /* random shit */
