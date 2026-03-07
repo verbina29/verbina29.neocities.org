@@ -13,33 +13,28 @@
 }
 /* Color Variables */
 :root {
-    --backgroundBase:  #0c0c0e;
-    --backgroundSecondary: #1c1c1e;
-    --backgroundTertiary:  #2c2c2e;
-    --backgroundQuaternary: #39393a;
+    color-scheme: light dark;
+    --backgroundBase:  light-dark(#f8eeee, #0c0c0e);
+    --backgroundSecondary: light-dark(#eadada, #1c1c1e);
+    --backgroundTertiary:  light-dark(#dec0c0, #2c2c2e);
+    --backgroundQuaternary: light-dark(#d2a8a8, #39393a);
 
-    --textColor: white;
-    --textColorSecondary: black;
+    --textColor: light-dark(black, white);
+    --textColorSecondary: light-dark(white, black);
 
     --frameColor: #b60000;
     --buttonColor: #cf0000;
-    --buttonBorder: white;
-    --hintColor: lightgrey;
+    --buttonBorder: light-dark(black, white);
+    --hintColor: light-dark(#3d414b, lightgrey);
 
-    --linkColor: #74fdff;
-    --linkColorVisited: #979eff;
-    --linkColorFaint: #c3ffff;
-    --linkColorVisitedFaint: #d2d6ff;
+    --linkColor: light-dark(#1400c4, #74fdff);
+    --linkColorVisited: light-dark(#5f008e, #979eff);
 
     --shadowSecondary: #18181a;
     --shadowSecondarySecondary: #202023;
 
-    --scrollbarPrimary: #660000;
-    --scrollbarSecondary: #242426;
-
-    --greyedOutText: grey;
-    --greyedOutBackground: darkgrey;
-    --greyedOutBorder: black;
+    --scrollbarPrimary: light-dark(#b82e2e, #660000);
+    --scrollbarSecondary: light-dark(#c48e8e, #242426);
 
     --textColorBlack: black;
     --linkColorBlack: navy;
@@ -360,15 +355,6 @@ a:visited {
     text-decoration: underline
 }
 
-.faintLink {
-    color: var(--linkColorFaint);
-    text-decoration: none;
-}
-.faintLink:visited {
-    color: var(--linkColorVisitedFaint);
-    text-decoration: none;
-}
-
 h1 {
     border-bottom: 1px solid var(--frameColor);
     font-size: 3em;
@@ -389,7 +375,7 @@ h2, h3, summary {
     border-width: 1px;
     border-radius: 8px;
     background-color: var(--buttonColor);
-    color: var(--textColorSecondary);
+    color: light-dark(var(--textColor), var(--textColorSecondary));
     font-weight: bold;
     flex: 1 0 0;
     text-align: center;
@@ -397,29 +383,18 @@ h2, h3, summary {
     align-self: stretch;
 }
 .button:visited {
-    color: var(--textColorSecondary);
+    color: light-dark(var(--textColor), var(--textColorSecondary));
 }
 .button:hover {
-    background-color: white;
+    background-color: var(--buttonBorder);
     border-color: var(--buttonColor);
+    color: light-dark(var(--textColorSecondary), var(--textColorSecondary));
 }
 
 .centered {
     margin: 0 auto;
 }
 
-.grey {
-    color: var(--greyedOutText);
-    background-color: var(--greyedOutBackground);
-    border-color: var(--greyedOutBorder);
-}
-.grey:hover {
-    background-color: darkgrey;
-    border-color: black;
-}
-.grey:visited {
-    color:grey;
-}
 .subsection {
     background-color: var(--backgroundSecondary);
     padding: 10px;
