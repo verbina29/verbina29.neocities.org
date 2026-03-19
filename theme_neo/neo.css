@@ -314,7 +314,7 @@ dd {
 
 /* Borders */
 
-main, aside, section, article, .navbar, .subsection, .button, .articleListing, figure, dl, footer, details {
+main, aside, section, article, .navbar, .subsection, .button, .articleListing, figure, dl, footer, details, .popup {
     border: 1px solid var(--frameColor);
     border-radius: 0px;
 }
@@ -426,7 +426,7 @@ code {
     font-family: "eleventh hour", sans-serif;
     font-size: 24px;
     font-smooth: never;
-    -webkit-font-smoothing : none;
+    -webkit-font-smoothing: none;
 }
 .eleventhHour a {
     text-decoration: none;
@@ -438,11 +438,27 @@ code {
     border-bottom: 4px solid var(--linkColorVisited);
     padding-bottom: 4px;
 }
+.eleventhHourMedium {
+    font-family: "eleventh hour", sans-serif;
+    font-size: 16px;
+    font-smooth: never;
+    -webkit-font-smoothing: none;
+}
+.eleventhHourMedium a {
+    text-decoration: none;
+    border-bottom: 3px solid var(--linkColor);
+    padding-bottom: 3px;
+}
+.eleventhHourMedium a:visited {
+    text-decoration: none;
+    border-bottom: 3px solid var(--linkColorVisited);
+    padding-bottom: 3px;
+}
 .eleventhHourSmall {
     font-family: "eleventh hour", sans-serif;
     font-size: 12px;
     font-smooth: never;
-    -webkit-font-smoothing : none;
+    -webkit-font-smoothing: none;
 }
 .eleventhHourSmall a {
     text-decoration: none;
@@ -578,6 +594,72 @@ code {
     --frameColor: var(--sierraBlue);
 }
 
+/* form elements styling */
+fieldset {
+    border: none;
+    margin: 0;
+    padding: 0;
+}
+input {
+    accent-color: var(--frameColor);
+}
+.textInput {
+    border-radius: 5px;
+    border: 1px solid var(--frameColor);
+    background-color: var(--backgroundQuaternary);
+    margin-top: 4px;
+}
+.textInput::placeholder {
+    color: var(--hintColor);
+    font-family: Raleway, sans-serif;
+}
+
+/* character grid for oc quiz styling */
+.cgImage {
+    max-height: 3em;
+    max-width: 3em;
+}
+.cgCharacter {
+    height: 3em;
+    width: 3em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.cgUnrevealed {
+    filter: brightness(0%) grayscale(100%) invert(1) brightness(50%);
+}
+.cgUniverse {
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    padding: 10px;
+    border: 1px solid var(--frameColor);
+    background-color: var(--backgroundTertiary);
+}
+.cgContainer {
+    display: flex;
+    flex-flow: row wrap;
+    gap: 10px;
+    margin-top: 10px;
+}
+.cgCharactersContainer {
+    display: flex;
+    gap: 5px;
+    padding-top: 5px;
+    flex-wrap: wrap;
+}
+.cgDot {
+    background-color: var(--frameColor);
+    height: 2em;
+    width: 2em;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.quizDebugPanel {
+    min-width: 33%;
+}
 /* random shit */
 .noMargins {
     margin: 0;
@@ -592,4 +674,48 @@ code {
     margin-right: auto;
     padding: 10px;
     width: fit-content;
+}
+
+/* popup styling mostly taken from w3schools <3 */
+
+ /* The Modal (background) */
+.popupContainer {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.popup {
+  background-color: var(--backgroundTertiary);
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 10px;
+  width: 80%; /* Could be more or less, depending on screen size */
+  position: relative;
+}
+
+/* The Close Button */
+.closePopup {
+  color: var(--buttonColor);
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-weight: bold;
+  font-size: 35px;
+  line-height: 0.5;
+  display: block;
+  margin: 5px;
+}
+
+.closePopup:hover, .closePopup:focus {
+  color: var(--textColor);
+  text-decoration: none;
+  cursor: pointer;
 }

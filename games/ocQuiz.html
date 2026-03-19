@@ -1,0 +1,1899 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>oc quiz</title>
+    <meta content="name every verbina29 character quiz" property="og:title" />
+    <meta content="quiz where you have to name every one of my ocs" property="og:description" />
+    <meta content="https://verbina29.neocities.org/games/ocQuiz" property="og:url" />
+    <meta content="https://verbina29.neocities.org/embed_icon.gif" property="og:image" />
+    <meta content="#B60000" data-react-helmet="true" name="theme-color" />
+    <link rel="shortcut icon" href="https://verbina29.neocities.org/favicon.ico">
+
+    <link href="../theme_neo/neo.css" rel="stylesheet" type="text/css" media="all">
+  </head>
+  <body>
+    <header><h1>NAME ALL MY OCS. NOW.</h1></header>
+    <nav><iframe class="navFrame" src="../navbar.html"></iframe></nav>
+    <div class="flex">
+    <main>
+      <div id="timer" class="eleventhHour centeredText"><span id="timerHours">00</span>:<span id="timerMinutes">00</span>:<span id="timerSeconds">00</span></div>
+
+      <div class="flex horizontalCenter"><input id="gameInput" class="textInput centeredText" placeholder="enter characters here" autofocus autocomplete=off></div>
+
+      <div id="counterDiv" class="centeredText eleventhHourMedium">Characters Named: <span id="counterNamed">0</span>/<span id="counterTotal">X</span></div>
+      <div id="remainingDiv" class="centeredText eleventhHourMedium">Characters Remaining: <span id="counterRemaining">X</span></div>
+      <div id="counterMistakesDiv" class="centeredText eleventhHourMedium">Mistakes: <span id="counterMistakes">0</span></div>
+
+      <div id="counterBonusDiv" class="centeredText eleventhHourMedium">Bonus Points: <span id="counterBonus">0</span>/<span id="counterBonusTotal">X</span></div>
+
+      <div class="cgContainer" id="cgContainer">
+        <!-- Container for generated content. -->
+      </div>
+    </main>
+
+    <aside id=debugInfo class="quizDebugPanel">
+      <h2>debug info!!!</h2><br>
+      <b>Valid Answers: </b>
+      <span id=debugValidNames></span><br><br>
+      <b>Incorrect Submissions: </b>
+      <span id=debugIncorrectAnswers></span><br><br>
+      <b>Correct Submissions: </b>
+      <span id=debugCorrectAnswers></span><br><br>
+      <b>Remaining Valid Answers: </b>
+      <span id=debugRemainingAnswers></span><br><br>
+      <b>Characters In Play: </b>
+      <span id=debugCharactersInPlay></span><br><br>
+      <b>Remaining Characters In Play: </b>
+      <span id=debugRemainingCharactersInPlay></span><br><br>
+      <b>Universes In Play: </b>
+      <span id=debugUniversesInPlay></span><br><br>
+      <b>Bonus Characters: </b>
+      <span id=debugAllBonus></span><br><br>
+      <b>Named Bonus Characters: </b>
+      <span id=debugBonusNamed></span>
+
+      <br><br>
+
+      <button onclick='startTimer("countup")'>manual start count-up timer</button>
+      <button onclick='startTimer("countdown", 0.25)'>manual start countdown (0.25 min)</button>
+      <button onclick="stopTimer()">manual stop timer</button>
+      <button onclick="settingsFieldset.disabled = false">manually reenable settings</button>
+      <button onclick="initializeAnswers()">manually reinitialize answers</button>
+      <button onclick="gameInput.disabled = false">manually reenable input field</button>
+      <button onclick="console.log(remainingAnswers)">print remaining answers to console</button>
+      <button onclick="togglePopup()">toggle results popup</button>
+      <button onclick='endGame("win")'>win button</button>
+      <button onclick='endGame("lose")'>lose button</button>
+      <button onclick='endGame("timeout")'>go to the timeout corner</button>
+      <button onclick='endGame("giveUp")'>extra give up button</button>
+    </aside>
+    </div>
+
+    <footer>
+      <div class="flex"><button onclick="startGame()" class="button eleventhHourSmall" id="startGameButton">Start Game!</button> <button onclick='endGame("giveUp")' class="button eleventhHourSmall" id="giveUpButton">Give Up...</button></div>
+      <br>
+      <fieldset id=settingsMain>
+        <input type="checkbox" id=allowAliases autocomplete=off>
+        <label>Allow Aliases/Nicknames?</label>
+        <input type="checkbox" id=requireFullNames autocomplete=off>
+        <label>Require Full Names?</label>
+        <input type="checkbox" id=requireDiacritics autocomplete=off>
+        <label>Require Diacritics?</label>
+        <br>
+        <input type="checkbox" id=publicInfoOnly checked autocomplete=off>
+        <label>Disable characters with no public info?</label>
+        <input type="checkbox" id=noMinorCharacters autocomplete=off>
+        <label>Disable minor characters?</label>
+        <br>
+        <input type="checkbox" id=enableKGM checked autocomplete=off>
+        <label id=enableKGMlabel>Enable KakoGenzaiMirai characters?</label>
+        <input type="checkbox" id=enableFlitterverse checked autocomplete=off>
+        <label id=enableFlitterverseLabel>Enable Flitterverse characters?</label>
+        <input type="checkbox" id=enableEleventhHour checked autocomplete=off>
+        <label id=enableEleventhHourLabel>Enable Eleventh Hour characters?</label>
+        <input type="checkbox" id=enablePeriscopeSystems checked autocomplete=off>
+        <label id=enablePeriscopeSystemsLabel>Enable Periscope Systems characters?</label>
+        <input type="checkbox" id=enableManaweavers checked autocomplete=off>
+        <label id=enableManaweaversLabel>Enable Manaweavers characters?</label>
+        <input type="checkbox" id=enableMetalworks checked autocomplete=off>
+        <label id=enableMetalworksLabel>Enable Metalworks characters?</label>
+        <input type="checkbox" id=enableHueShift checked autocomplete=off>
+        <label id=enableHueShiftLabel>Enable Hue Shift characters?</label>
+        <input type="checkbox" id=enableSylvolaia checked autocomplete=off>
+        <label id=enableSylvolaiaLabel>Enable Sylvolaia characters?</label>
+        <input type="checkbox" id=enableArgentumAntipodes checked autocomplete=off>
+        <label id=enableArgentumAntipodesLabel>Enable Argentum Antipodes characters?</label>
+        <input type="checkbox" id=enableTravelerverse checked autocomplete=off>
+        <label id=enableTravelerverseLabel>Enable Travelerverse characters?</label>
+        <input type="checkbox" id=enableRyva checked autocomplete=off>
+        <label id=enableRyvaLabel>Enable Ryva characters?</label>
+        <input type="checkbox" id=enableTUTA checked autocomplete=off>
+        <label id=enableTUTALabel>Enable TUTA characters?</label>
+        <input type="checkbox" id=enableMinecraft checked autocomplete=off>
+        <label id=enableMinecraftLabel>Enable Minecraft characters?</label>
+        <input type="checkbox" id=enableOtherFandom checked autocomplete=off>
+        <label id=enableOtherFandomLabel>Enable misc fandom characters?</label>
+        <input type="checkbox" id=enableMisc checked autocomplete=off>
+        <label id=enableMiscLabel>Enable miscellaneous characters?</label>
+        <br>
+        <b>Time Limit:</b>
+        <input type="radio" name="timer" id="timerInfinite" checked autocomplete=off>
+        <label id=timerInfiniteLabel>Infinite</label>
+        <input type="radio" name="timer" id="timer15" autocomplete=off>
+        <label id=timer15label>15 minutes</label>
+        <input type="radio" name="timer" id="timer30" autocomplete=off>
+        <label id=timer30label>30 minutes</label>
+        <input type="radio" name="timer" id="timerHour" autocomplete=off>
+        <label id=timerHourLabel>1 hour</label>
+        <br>
+        <b>Unrevealed Character Display:</b>
+        <input type="radio" name="images" id="imagesNone" checked autocomplete=off>
+        <label id="imagesNoneLabel">Question Marks</label>
+        <input type="radio" name="images" id="imagesColors" autocomplete=off>
+        <label id=imagesColorsLabel>Colored Dots</label>
+        <input type="radio" name="images" id="imagesGrayscale" autocomplete=off>
+        <label id="imagesGrayscaleLabel">Grayscale Icons</label>
+
+      </fieldset>
+      <br>
+      <input type="checkbox" id=showDebugInfo autocomplete=off>
+      <label id=debugInfoLabel>Show debug info?</label> <span>(Debug info contains spoilers.)</span>
+    </footer>
+
+    <div class="popupContainer" id="popupContainer">
+      <div class="popup" id="popup">
+        <span class="closePopup" onclick="togglePopup()">&times</span>
+        <h2 class="centeredText" id="resultsHeader">PLACEHOLDER TEXT!</h2>
+
+        <p id="resultsBody">
+          <span id="resultsTimeLabel">Final Time:</span> <span id="resultsTime">XX:XX:XX</span><br>
+          Characters Named: <span id="resultsNamedChars">X</span>/<span id="resultsTotalChars">X</span><br>
+          Mistakes Made: <span id="resultsMistakes">0</span><br>
+          Bonus Points: <span id="resultsBonus">0</span>/<span id=resultsBonusTotal>X</span><br>
+          Settings: Aliases?<span id="resultsSettingsAliases">❌</span> Full Names?<span id="resultsSettingsFullNames">❌</span> Diacritics?<span id="resultsSettingsDiacritics">❌</span> Has Info Only?<span id="resultsSettingsPublicInfo">❌</span><br>
+          Character Display Type: <span id="resultsSettingsDisplayType">PLACEHOLDER VALUE</span><br>
+          Universes Enabled: <span id="resultsUniverses">PLACEHOLDER VALUE</span>
+        </p>
+        <button class="button eleventhHourSmall" onClick="copyResults()">Copy results to clipboard!</button>
+      </div>
+    </div>
+  </body>
+
+  <script>
+    // i hate javascript don't look at any of this. i'll cry if you look at my javascript.
+    // i shoved it through a linter or whatever though so it's less embarrassing now right
+
+    // OC info fields
+    const characters = [
+      /* Template
+      {
+        name: "",
+        nameDiacritics: "",
+        fullName: "",
+        fullNameDiacritics: "",
+        aliases: ["", ""],
+        universe: "",
+        hasFullName: false, hasDiacritics: false, hasAliases: false, hasInfo: false, isMajor: false,
+        image: "ocQuiz/unknown.PNG",
+        color: "#cccccc"
+      }, */
+      // KakoGenzaiMirai
+      {
+        name: "Alvarus",
+        aliases: ["Genzai"],
+        universe: "KakoGenzaiMirai",
+        hasFullName: false,
+        hasDiacritics: false,
+        hasAliases: true,
+        hasInfo: true,
+        isMajor: true,
+        image: "ocQuiz/alvarus.PNG",
+        color: "#a8b758"
+      },
+      {
+        name: "Yvik",
+        aliases: ["Mirai", "the Mirai Killer"],
+        universe: "KakoGenzaiMirai",
+        hasFullName: false,
+        hasDiacritics: false,
+        hasAliases: true,
+        hasInfo: true,
+        isMajor: true,
+        image: "ocQuiz/yvik.PNG",
+        color: "#a32626"
+      },
+      {
+        name: "Sierra",
+        aliases: ["Kako"],
+        universe: "KakoGenzaiMirai",
+        hasFullName: false,
+        hasDiacritics: false,
+        hasAliases: true,
+        hasInfo: true,
+        isMajor: true,
+        image: "ocQuiz/sierra.PNG",
+        color: "#8da9cc"
+      },
+      {
+        name: "Nykiset",
+        universe: "KakoGenzaiMirai",
+        hasFullName: false,
+        hasDiacritics: false,
+        hasAliases: false,
+        hasInfo: false,
+        isMajor: true,
+        image: "ocQuiz/nykiset.PNG",
+        color: "#b55026"
+      },
+      {
+        name: "Karameni",
+        fullName: "Josie Karameni",
+        universe: "KakoGenzaiMirai",
+        hasFullName: true,
+        hasDiacritics: false,
+        hasAliases: false,
+        hasInfo: true,
+        isMajor: false,
+        image: "ocQuiz/karameni.PNG",
+        color: "#a161ad"
+      },
+      // Flitterverse
+      {
+        name: "Rin",
+        aliases: ["Rinrin"],
+        universe: "Flitterverse",
+        hasFullName: false,
+        hasDiacritics: false,
+        hasAliases: true,
+        hasInfo: false,
+        isMajor: true,
+        image: "ocQuiz/rin.PNG",
+        color: "#854b69"
+      },
+      {
+        name: "Misaka",
+        universe: "Flitterverse",
+        hasFullName: false,
+        hasDiacritics: false,
+        hasAliases: false,
+        hasInfo: false,
+        isMajor: true,
+        image: "ocQuiz/misaka.PNG",
+        color: "#d93726"
+      },
+      {
+        name: "Nyuli",
+        universe: "Flitterverse",
+        hasFullName: false,
+        hasDiacritics: false,
+        hasAliases: false,
+        hasInfo: false,
+        isMajor: true,
+        image: "ocQuiz/nyuli.PNG",
+        color: "#b9f6aa"
+      },
+      {
+        name: "Riltys",
+        fullName: "Riltyssikir",
+        aliases: ["Rilty"],
+        universe: "Flitterverse",
+        hasFullName: true,
+        hasDiacritics: false,
+        hasAliases: false,
+        hasInfo: false,
+        isMajor: true,
+        image: "ocQuiz/riltyssikir.PNG",
+        color: "#a684d3"
+      },
+      // Eleventh Hour
+      {
+        name: "Percival",
+        aliases: ["Percy", "Peredur"],
+        universe: "Eleventh Hour",
+        hasFullName: false,
+        hasDiacritics: false,
+        hasAliases: true,
+        hasInfo: true,
+        isMajor: true,
+        image: "ocQuiz/percival.PNG",
+        color: "#74b7a2"
+      },
+      {
+        name: "Stelle",
+        fullName: "Leka Alcyone Stelle",
+        universe: "Eleventh Hour",
+        hasFullName: true,
+        hasDiacritics: false,
+        hasAliases: false,
+        hasInfo: true,
+        isMajor: false,
+        image: "ocQuiz/stelle.PNG",
+        color: "#b4a8c8"
+      },
+      {
+        name: "Visk",
+        universe: "Eleventh Hour",
+        hasFullName: false,
+        hasDiacritics: false,
+        hasAliases: false,
+        hasInfo: false,
+        isMajor: false,
+        image: "ocQuiz/visk.PNG",
+        color: "#ea7848"
+      },
+      {
+        name: "Celie",
+        nameDiacritics: "Célie",
+        universe: "Eleventh Hour",
+        hasFullName: false,
+        hasDiacritics: true,
+        hasAliases: false,
+        hasInfo: false,
+        isMajor: false,
+        image: "ocQuiz/celie.PNG",
+        color: "#f2c3db"
+      },
+      {
+        name: "MAY",
+        fullName: "MAY(HEM)",
+        universe: "Eleventh Hour",
+        hasFullName: true,
+        hasDiacritics: false,
+        hasAliases: false,
+        hasInfo: false,
+        isMajor: true,
+        image: "ocQuiz/may.PNG",
+        color: "#ff00c2"
+      },
+      // Periscope Systems
+      {
+        name: "Periapsis",
+        fullName: "PER-1 APSIS",
+        aliases: ["Perry", "Peri"],
+        universe: "Periscope Systems",
+        hasFullName: true,
+        hasDiacritics: false,
+        hasAliases: true,
+        hasInfo: true,
+        isMajor: true,
+        image: "ocQuiz/periapsis.PNG",
+        color: "#7d1111"
+      },
+      {
+        name: "Apoapsis",
+        fullName: "AP-0 APSIS",
+        aliases: ["Appy", "Appi"],
+        universe: "Periscope Systems",
+        hasFullName: true,
+        hasDiacritics: false,
+        hasAliases: true,
+        hasInfo: true,
+        isMajor: true,
+        image: "ocQuiz/apoapsis.PNG",
+        color: "#294d96"
+      },
+      // Manaweavers
+      {
+        name: "Two",
+        aliases: ["Alder", "One", "Lord Two"], // i'm not putting alder in as a different character bc i don't feel like it but he can have aliases
+        universe: "Manaweavers",
+        hasFullName: false,
+        hasDiacritics: false,
+        hasAliases: true,
+        hasInfo: true,
+        isMajor: true,
+        image: "ocQuiz/two.PNG",
+        color: "#84beff"
+      },
+      {
+        name: "Kiro",
+        universe: "Manaweavers",
+        hasFullName: false,
+        hasDiacritics: false,
+        hasAliases: false,
+        hasInfo: true,
+        isMajor: true,
+        image: "ocQuiz/kiro.PNG",
+        color: "#f0dc7f"
+      },
+      {
+        name: "Peresk",
+        universe: "Manaweavers",
+        hasFullName: false,
+        hasDiacritics: false,
+        hasAliases: false,
+        hasInfo: true,
+        isMajor: false,
+        image: "ocQuiz/peresk.PNG",
+        color: "#5a9c65"
+      },
+      {
+        name: "Perima",
+        fullName: "Perima Cistron Luont",
+        aliases: ["Doctor Perima", "Dr. Perima", "Doctor Perima Cistron Luont", "Dr. Perima Cistron Luont", "Doctor Luont", "Dr. Luont"], // she isn't a medical doctor but she does have a doctorate
+        universe: "Manaweavers",
+        hasFullName: true,
+        hasDiacritics: false,
+        hasAliases: true,
+        hasInfo: true,
+        isMajor: true,
+        image: "ocQuiz/perima.PNG",
+        color: "#f88dff"
+      },
+      // Metalworks
+      {
+        name: "Sedge", // i'm not putting his deadname in here but he does have one
+        universe: "Metalworks",
+        hasFullName: false,
+        hasDiacritics: false,
+        hasAliases: false,
+        hasInfo: true,
+        isMajor: true,
+        image: "ocQuiz/sedge.PNG",
+        color: "#a4caa5"
+      },
+      {
+        name: "Rika",
+        universe: "Metalworks",
+        hasFullName: false,
+        hasDiacritics: false,
+        hasAliases: false,
+        hasInfo: true,
+        isMajor: true,
+        image: "ocQuiz/rika.PNG",
+        color: "#ffed86"
+      },
+      {
+        name: "Wulfric",
+        universe: "Metalworks",
+        hasFullName: false,
+        hasDiacritics: false,
+        hasAliases: false,
+        hasInfo: true,
+        isMajor: true,
+        image: "ocQuiz/wulfric.PNG",
+        color: "#4e6e6c"
+      },
+      {
+        name: "Alexander",
+        aliases: ["Alex"],
+        universe: "Metalworks",
+        hasFullName: false,
+        hasDiacritics: false,
+        hasAliases: false,
+        hasInfo: false,
+        isMajor: true,
+        image: "ocQuiz/alexander.PNG",
+        color: "#d9a763"
+      },
+      // Hue Shift
+      {
+        name: "Chroma",
+        fullName: "Chromatic Aberration",
+        universe: "Hue Shift",
+        hasFullName: true,
+        hasDiacritics: false,
+        hasAliases: false,
+        hasInfo: true,
+        isMajor: true,
+        image: "ocQuiz/chroma.PNG",
+        color: "#02d12b"
+      },
+      // Abby is actually just an AU of Chroma but it's the only AU character on here so like, fuck it we ball.
+      {
+        name: "Abby",
+        universe: "Hue Shift",
+        hasFullName: false,
+        hasDiacritics: false,
+        hasAliases: false,
+        hasInfo: false,
+        isMajor: true,
+        image: "ocQuiz/abby.PNG",
+        color: "#ff0000"
+      },
+      {
+        name: "Alicia",
+        universe: "Hue Shift",
+        hasFullName: false,
+        hasDiacritics: false,
+        hasAliases: false,
+        hasInfo: false,
+        isMajor: false,
+        image: "ocQuiz/alicia.PNG",
+        color: "#ff49cc"
+      },
+      {
+        name: "Touchtone",
+        universe: "Hue Shift",
+        hasFullName: false,
+        hasDiacritics: false,
+        hasAliases: false,
+        hasInfo: false,
+        isMajor: false,
+        image: "ocQuiz/touchtone.PNG",
+        color: "#424455"
+      },
+      // Sylvolaia
+      {
+        name: "Errata",
+        fullName: "Keimon Errata",
+        aliases: ["The Lord Interloper in Chains"],
+        universe: "Sylvolaia",
+        hasFullName: true,
+        hasDiacritics: false,
+        hasAliases: true,
+        hasInfo: true,
+        isMajor: false,
+        image: "ocQuiz/errata.PNG",
+        color: "#9ffdf8"
+      },
+      {
+        name: "Pisca",
+        fullName: "Pisca Minu",
+        universe: "Sylvolaia",
+        hasFullName: true,
+        hasDiacritics: false,
+        hasAliases: false,
+        hasInfo: true,
+        isMajor: true,
+        image: "ocQuiz/pisca.PNG",
+        color: "#20a0a5"
+      },
+      {
+        name: "Simary",
+        fullName: "Simary Minu",
+        universe: "Sylvolaia",
+        hasFullName: true,
+        hasDiacritics: false,
+        hasAliases: false,
+        hasInfo: false,
+        isMajor: false,
+        image: "ocQuiz/simary.PNG",
+        color: "#75214d"
+      },
+      {
+        name: "Gikarra",
+        fullName: "Gikarra Minu",
+        universe: "Sylvolaia",
+        hasFullName: true,
+        hasDiacritics: false,
+        hasAliases: false,
+        hasInfo: false,
+        isMajor: false,
+        image: "ocQuiz/gikarra.PNG",
+        color: "#4166dd"
+      },
+      {
+        name: "Siralius", // i don't feel like implementing multiple names right now just for them lmao
+        fullName: "Siralius Vikal",
+        aliases: ["Magus Siralius Vikal III of the Winter Court of Vania", "Sira", "Siral"], // honestly forgot how many stupid titles they have. this isnt even all of them lmao
+        universe: "Sylvolaia",
+        hasFullName: true,
+        hasDiacritics: false,
+        hasAliases: true,
+        hasInfo: false,
+        isMajor: false,
+        image: "ocQuiz/siralius.PNG",
+        color: "#7995e1"
+      },
+      // Argentum Antipodes
+      {
+        name: "Beatrix",
+        fullName: "Beatrix Argent",
+        universe: "Argentum Antipodes",
+        hasFullName: true,
+        hasDiacritics: false,
+        hasAliases: false,
+        hasInfo: false,
+        isMajor: true,
+        image: "ocQuiz/beatrix.PNG",
+        color: "#9caabc"
+      },
+      {
+        name: "Silvester",
+        fullName: "Silvester Tustel",
+        universe: "Argentum Antipodes",
+        hasFullName: true,
+        hasDiacritics: false,
+        hasAliases: false,
+        hasInfo: false,
+        isMajor: true,
+        image: "ocQuiz/silvester.PNG",
+        color: "#66859e"
+      },
+      {
+        name: "Eike",
+        fullName: "Eike von Brandt",
+        universe: "Argentum Antipodes",
+        hasFullName: true,
+        hasDiacritics: false,
+        hasAliases: false,
+        hasInfo: false,
+        isMajor: true,
+        image: "ocQuiz/eike.PNG",
+        color: "#387b5b"
+      },
+      {
+        name: "Sol",
+        universe: "Argentum Antipodes",
+        hasFullName: false,
+        hasDiacritics: false,
+        hasAliases: false,
+        hasInfo: false,
+        isMajor: true,
+        image: "ocQuiz/sol.PNG",
+        color: "#966d1c"
+      },
+      {
+        name: "Cassandra",
+        fullName: "Cassandra Castille",
+        aliases: ["Cass", "Cassie"],
+        universe: "Argentum Antipodes",
+        hasFullName: true,
+        hasDiacritics: false,
+        hasAliases: true,
+        hasInfo: false,
+        isMajor: true,
+        image: "ocQuiz/cassandra.PNG",
+        color: "#9cae5a"
+      },
+      {
+        name: "Velvet",
+        fullName: "Velvet Belladonna",
+        universe: "Argentum Antipodes",
+        hasFullName: true,
+        hasDiacritics: false,
+        hasAliases: false,
+        hasInfo: false,
+        isMajor: true,
+        image: "ocQuiz/velvet.PNG",
+        color: "#d270aa"
+      },
+      {
+        name: "Aconite",
+        universe: "Argentum Antipodes",
+        hasFullName: false,
+        hasDiacritics: false,
+        hasAliases: false,
+        hasInfo: false,
+        isMajor: true,
+        image: "ocQuiz/aconite.PNG",
+        color: "#d5bd3b"
+      },
+      {
+        name: "Nox",
+        fullName: "Nox Lillevere",
+        universe: "Argentum Antipodes",
+        hasFullName: true,
+        hasDiacritics: false,
+        hasAliases: false,
+        hasInfo: false,
+        isMajor: true,
+        image: "ocQuiz/nox.PNG",
+        color: "#102485"
+      },
+      {
+        name: "Lucida",
+        fullName: "Lucida Glass",
+        universe: "Argentum Antipodes",
+        hasFullName: true,
+        hasDiacritics: false,
+        hasAliases: false,
+        hasInfo: false,
+        isMajor: false,
+        image: "ocQuiz/lucida.PNG",
+        color: "#94cad6"
+      },
+      // Travelerverse
+      {
+        name: "The Traveler",
+        universe: "Travelerverse", // Look, this one is basically a freebie.
+        hasFullName: false,
+        hasDiacritics: false,
+        hasAliases: false,
+        hasInfo: false,
+        isMajor: true,
+        image: "ocQuiz/traveler.PNG",
+        color: "#232229"
+      },
+      {
+        name: "Archaeon",
+        universe: "Travelerverse",
+        hasFullName: false,
+        hasDiacritics: false,
+        hasAliases: false,
+        hasInfo: false,
+        isMajor: true,
+        image: "ocQuiz/archaeon.PNG",
+        color: "#c3ecf2"
+      },
+      {
+        name: "Kamunya",
+        universe: "Travelerverse",
+        hasFullName: false,
+        hasDiacritics: false,
+        hasAliases: false,
+        hasInfo: false,
+        isMajor: false,
+        image: "ocQuiz/kamunya.PNG",
+        color: "#f740f6"
+      },
+      // Ryva
+      {
+        name: "Ink",
+        fullName: "Senki Akatsuki", // look she somehow began as a Persona OC
+        universe: "Ryva",
+        hasFullName: true,
+        hasDiacritics: false,
+        hasAliases: false,
+        hasInfo: false,
+        isMajor: true,
+        image: "ocQuiz/ink.PNG",
+        color: "#ca0000"
+      },
+      {
+        name: "Lykos",
+        universe: "Ryva",
+        hasFullName: false,
+        hasDiacritics: false,
+        hasAliases: false,
+        hasInfo: false,
+        isMajor: true,
+        image: "ocQuiz/lykos.PNG",
+        color: "#0072ca"
+      },
+      {
+        name: "Ramona",
+        aliases: ["Mona"],
+        universe: "Ryva",
+        hasFullName: false,
+        hasDiacritics: false,
+        hasAliases: true,
+        hasInfo: false,
+        isMajor: true,
+        image: "ocQuiz/ramona.PNG",
+        color: "#8b22cc"
+      },
+      {
+        name: "River",
+        universe: "Ryva",
+        hasFullName: false,
+        hasDiacritics: false,
+        hasAliases: false,
+        hasInfo: false,
+        isMajor: true,
+        image: "ocQuiz/river.PNG",
+        color: "#7176ea"
+      },
+      {
+        name: "Rogue",
+        universe: "Ryva",
+        hasFullName: false,
+        hasDiacritics: false,
+        hasAliases: false,
+        hasInfo: false,
+        isMajor: true,
+        image: "ocQuiz/rogue.PNG",
+        color: "#a00000"
+      },
+      {
+        name: "Milena",
+        nameDiacritics: "Milenā",
+        universe: "Ryva",
+        hasFullName: false,
+        hasDiacritics: true,
+        hasAliases: false,
+        hasInfo: false,
+        isMajor: true,
+        image: "ocQuiz/milena.PNG",
+        color: "#fff5ce"
+      },
+      {
+        name: "Grim",
+        universe: "Ryva",
+        hasFullName: false,
+        hasDiacritics: false,
+        hasAliases: false,
+        hasInfo: false,
+        isMajor: false,
+        image: "ocQuiz/grim.PNG",
+        color: "#a84149"
+      },
+      {
+        name: "Lucielle",
+        universe: "Ryva",
+        hasFullName: false,
+        hasDiacritics: false,
+        hasAliases: false,
+        hasInfo: false,
+        isMajor: true,
+        image: "ocQuiz/lucielle.PNG",
+        color: "#efa7b5"
+      },
+      {
+        name: "Amida",
+        universe: "Ryva",
+        hasFullName: false,
+        hasDiacritics: false,
+        hasAliases: false,
+        hasInfo: false,
+        isMajor: false,
+        image: "ocQuiz/amida.PNG",
+        color: "#ce699b"
+      },
+      {
+        name: "Vio",
+        universe: "Ryva",
+        hasFullName: false,
+        hasDiacritics: false,
+        hasAliases: false,
+        hasInfo: false,
+        isMajor: false,
+        image: "ocQuiz/vio.PNG",
+        color: "#6e554e"
+      },
+      {
+        name: "Eli",
+        universe: "Ryva",
+        hasFullName: false,
+        hasDiacritics: false,
+        hasAliases: false,
+        hasInfo: false,
+        isMajor: false,
+        image: "ocQuiz/eli.PNG",
+        color: "#3e3126"
+      },
+      {
+        name: "Sarina",
+        universe: "Ryva",
+        hasFullName: false,
+        hasDiacritics: false,
+        hasAliases: false,
+        hasInfo: false,
+        isMajor: false,
+        image: "ocQuiz/sarina.PNG",
+        color: "#ab79d1"
+      },
+      {
+        name: "Inton",
+        universe: "Ryva",
+        hasFullName: false,
+        hasDiacritics: false,
+        hasAliases: false,
+        hasInfo: false,
+        isMajor: false,
+        image: "ocQuiz/inton.PNG",
+        color: "#ade395"
+      },
+      {
+        name: "Adam",
+        universe: "Ryva",
+        hasFullName: false,
+        hasDiacritics: false,
+        hasAliases: false,
+        hasInfo: false,
+        isMajor: false,
+        image: "ocQuiz/adam.PNG",
+        color: "#7ad1cb"
+      },
+      {
+        name: "AC",
+        fullName: "Arthur-Camellia",
+        universe: "Ryva",
+        hasFullName: true,
+        hasDiacritics: false,
+        hasAliases: false,
+        hasInfo: false,
+        isMajor: false,
+        image: "ocQuiz/AC.PNG",
+        color: "#33753a"
+      },
+      {
+        name: "Diego",
+        universe: "Ryva",
+        hasFullName: false,
+        hasDiacritics: false,
+        hasAliases: false,
+        hasInfo: false,
+        isMajor: false,
+        image: "ocQuiz/diego.PNG",
+        color: "#ce5218"
+      },
+      {
+        name: "Meluneki",
+        nameDiacritics: "Melunēki",
+        universe: "Ryva",
+        hasFullName: false,
+        hasDiacritics: true,
+        hasAliases: false,
+        hasInfo: false,
+        isMajor: false,
+        image: "ocQuiz/meluneki.PNG",
+        color: "#6f4a7b"
+      },
+      // TUTA
+      {
+        name: "Vakua",
+        universe: "TUTA Multiverse",
+        hasFullName: false,
+        hasDiacritics: false,
+        hasAliases: false,
+        hasInfo: false,
+        isMajor: true,
+        image: "ocQuiz/vakua.PNG",
+        color: "#ffffff"
+      },
+      {
+        name: "Kitikoe",
+        universe: "TUTA Multiverse",
+        hasFullName: false,
+        hasDiacritics: false,
+        hasAliases: false,
+        hasInfo: false,
+        isMajor: true,
+        image: "ocQuiz/kitikoe.PNG",
+        color: "#404351"
+      },
+      {
+        name: "Deodatus",
+        aliases: ["Godmaker"],
+        universe: "TUTA Multiverse",
+        hasFullName: false,
+        hasDiacritics: false,
+        hasAliases: true,
+        hasInfo: false,
+        isMajor: true,
+        image: "ocQuiz/deodatus.PNG",
+        color: "#b3892b"
+      },
+      {
+        name: "Gamemaster",
+        aliases: ["Wish-Granter", "Host of Gamemaster's Zone"],
+        universe: "TUTA Multiverse",
+        hasFullName: false,
+        hasDiacritics: false,
+        hasAliases: false,
+        hasInfo: true,
+        isMajor: true,
+        image: "ocQuiz/gamemaster.PNG",
+        color: "#265db8"
+      },
+      // miney crafta (none of these characters are actually from the same universe but they're all minecraft ocs)
+      {
+        name: "Damascus",
+        fullName: "Damascus Asero",
+        aliases: ["The Crimson Sword", "Saint Damascus", "Daedalus"], // he probably had more but i don't remember any of them <3
+        universe: "Minecraft",
+        hasFullName: true,
+        hasDiacritics: false,
+        hasAliases: true,
+        hasInfo: true,
+        isMajor: true,
+        image: "ocQuiz/damascus.PNG",
+        color: "#a2011c"
+      },
+      {
+        name: "Lira",
+        fullName: "Lira Mendim",
+        universe: "Minecraft",
+        hasFullName: true,
+        hasDiacritics: false,
+        hasAliases: false,
+        hasInfo: false,
+        isMajor: false,
+        image: "ocQuiz/lira.PNG",
+        color: "#6a5ea5"
+      },
+      {
+        name: "Byssek",
+        universe: "Minecraft",
+        hasFullName: false,
+        hasDiacritics: false,
+        hasAliases: false,
+        hasInfo: false,
+        isMajor: true,
+        image: "ocQuiz/byssek.PNG",
+        color: "#be5e20"
+      },
+      // other fandoms
+      {
+        name: "Contrick",
+        fullName: "Confidence Trick",
+        aliases: ["Connie", "Con", "Confidence", "Trick"],
+        universe: "Other Fandom",
+        hasFullName: true,
+        hasDiacritics: false,
+        hasAliases: true,
+        hasInfo: false,
+        isMajor: true,
+        image: "ocQuiz/contrick.PNG",
+        color: "#4b902e"
+      },
+      {
+        name: "Salvie",
+        fullName: "Salvie Neolin",
+        universe: "Other Fandom",
+        hasFullName: true,
+        hasDiacritics: false,
+        hasAliases: false,
+        hasInfo: false,
+        isMajor: true,
+        image: "ocQuiz/salvie.PNG",
+        color: "#005682"
+      },
+      {
+        name: "Ceko",
+        universe: "Other Fandom",
+        hasFullName: false,
+        hasDiacritics: false,
+        hasAliases: false,
+        hasInfo: false,
+        isMajor: true,
+        image: "ocQuiz/ceko.PNG",
+        color: "#325595"
+      },
+      {
+        name: "Phi",
+        universe: "Other Fandom",
+        hasFullName: false,
+        hasDiacritics: false,
+        hasAliases: false,
+        hasInfo: false,
+        isMajor: true,
+        image: "ocQuiz/phi.PNG",
+        color: "#243c69"
+      },
+      // misc characters
+      {
+        name: "Scarborough",
+        fullName: "Rubinalia Scarborough",
+        aliases: ["Ruby"],
+        universe: "Miscellaneous Characters",
+        hasFullName: true,
+        hasDiacritics: false,
+        hasAliases: true,
+        hasInfo: false,
+        isMajor: true,
+        image: "ocQuiz/scarborough.PNG",
+        color: "#cc192d"
+      },
+      {
+        name: "Vincent",
+        fullName: "Vincent Hawthorne",
+        universe: "Miscellaneous Characters",
+        hasFullName: true,
+        hasDiacritics: false,
+        hasAliases: false,
+        hasInfo: false,
+        isMajor: true,
+        image: "ocQuiz/vincent.PNG",
+        color: "#80a064"
+      },
+      {
+        name: "Cherry",
+        fullName: "Cherry Hawthorne",
+        universe: "Miscellaneous Characters",
+        hasFullName: true,
+        hasDiacritics: false,
+        hasAliases: false,
+        hasInfo: false,
+        isMajor: true,
+        image: "ocQuiz/cherry.PNG",
+        color: "#cc2e5d"
+      },
+      {
+        name: "Niihono",
+        fullName: "Niihono Aifushi",
+        aliases: ["Niita", "Niita Aifushi"],
+        universe: "Miscellaneous Characters",
+        hasFullName: true,
+        hasDiacritics: false,
+        hasAliases: true,
+        hasInfo: false,
+        isMajor: true,
+        image: "ocQuiz/niihono.PNG",
+        color: "#5f5f72"
+      },
+      {
+        name: "Beryl & Kyanite",
+        aliases: ["Beryl", "Kyanite", "B3_RYL", "Kyanite Antivirus"],
+        universe: "Miscellaneous Characters",
+        hasFullName: false,
+        hasDiacritics: false,
+        hasAliases: true,
+        hasInfo: false,
+        isMajor: false,
+        image: "ocQuiz/beryl_and_kyanite.PNG",
+        color: "#764176"
+      },
+    ]
+    // i guess i need some sort of lookup map
+    var nameMap = new Map()
+
+    function buildNameMap(characters) {
+      for (let i in characters) {
+        var character = characters[i]
+
+        nameMap.set(cleanInput(character.name), character)
+        console.log("setting name", character.name)
+        if (character.hasAliases) {
+          for (let i in character.aliases) {
+            nameMap.set(cleanInput(character.aliases[i]), character)
+            console.log("setting alias", character.aliases[i])
+          }
+        }
+        if (character.hasFullName) {
+          nameMap.set(cleanInput(character.fullName), character)
+          console.log("setting full name", character.fullName)
+        }
+        if (character.hasDiacritics) {
+          nameMap.set(cleanInput(character.nameDiacritics), character)
+          if (character.hasFullName) {
+            nameMap.set(cleanInput(character.fullNameDiacritics), character)
+          }
+        }
+      }
+      return nameMap
+    }
+    var nameMap = buildNameMap(characters)
+    console.log("nameMap built: ", nameMap)
+
+    // define most of the fields and shit
+    const gameInput = document.getElementById("gameInput")
+    const debugValidNames = document.getElementById("debugValidNames")
+    const debugIncorrectAnswers = document.getElementById("debugIncorrectAnswers")
+    const debugCorrectAnswers = document.getElementById("debugCorrectAnswers")
+    const debugRemainingAnswers = document.getElementById("debugRemainingAnswers")
+    const debugCharactersInPlay = document.getElementById("debugCharactersInPlay")
+    const debugRemainingCharactersInPlay = document.getElementById("debugRemainingCharactersInPlay")
+    const debugUniversesInPlay = document.getElementById("debugUniversesInPlay")
+    const debugAllBonus = document.getElementById("debugAllBonus")
+    const debugBonusNamed = document.getElementById("debugBonusNamed")
+    const counterNamed = document.getElementById("counterNamed")
+    const counterTotal = document.getElementById("counterTotal")
+    const counterRemaining = document.getElementById("counterRemaining")
+    const counterMistakes = document.getElementById("counterMistakes")
+    const settingsFieldset = document.getElementById("settingsMain")
+    const resultsHeader = document.getElementById("resultsHeader")
+    const resultsBody = document.getElementById("resultsBody")
+    const resultsTime = document.getElementById("resultsTime")
+    const resultsTimeLabel = document.getElementById("resultsTimeLabel")
+    const resultsNamedChars = document.getElementById("resultsNamedChars")
+    const resultsTotalChars = document.getElementById("resultsTotalChars")
+    const resultsMistakes = document.getElementById("resultsMistakes")
+    const resultsSettingsAliases = document.getElementById("resultsSettingsAliases")
+    const resultsSettingsFullNames = document.getElementById("resultsSettingsFullNames")
+    const resultsSettingsDiacritics = document.getElementById("resultsSettingsDiacritics")
+    const resultsSettingsPublicInfo = document.getElementById("resultsSettingsPublicInfo")
+    const resultsSettingsDisplayType = document.getElementById("resultsSettingsDisplayType")
+    const resultsUniverses = document.getElementById("resultsUniverses")
+    const debugCheckbox = document.getElementById("showDebugInfo")
+    const debugInfo = document.getElementById("debugInfo")
+    const cgContainer = document.getElementById("cgContainer")
+
+    var incorrectSubmissions = []
+    var correctSubmissions = []
+    var remainingAnswers = []
+    var submittedBonusCharacters = []
+
+    // PAGE LOAD INITIALIZATION
+    settings = getSettings()
+    validAnswers = buildValidAnswers(characters, settings)
+
+
+    allCharacterNames = getAllCharacterNames()
+    allAltNames = getAllAltNames()
+
+    charactersInPlay = getCharactersInPlay()
+    remainingCharactersInPlay = getRemainingCharactersInPlay()
+    activeUniverses = getActiveUniverses()
+    bonusCharacters = getBonusCharacters()
+
+    updateInfoDisplays()
+    updateDebugInfo()
+    if (!debugCheckbox.checked) {
+      hideElement(debugInfo)
+    }
+
+    generateCharacterGrid()
+
+    // function to get alt names from a name
+    function getAltNames(name) {
+      var character = nameMap.get(name)
+      var altNames = []
+
+      altNames.push(cleanInput(character.name))
+
+      if (character.hasFullName) {
+        altNames.push(cleanInput(character.fullName))
+      }
+      if (character.hasAliases) {
+        for (let i in character.aliases) {
+          altNames.push(cleanInput(character.aliases[i]))
+        }
+      }
+      if (character.hasDiacritics) {
+        altNames.push(cleanInput(character.nameDiacritics))
+        if (character.hasFullName) {
+          altNames.push(cleanInput(character.fullNameDiacritics))
+        }
+      }
+      var altNames = altNames.filter(x => x !== name)
+      return altNames
+    }
+
+    // get all altNames
+    function getAllAltNames() {
+      var allAltNames = []
+
+      for (let i in characters) {
+        for (let a of getAltNames(cleanInput(characters[i].name))) {
+          allAltNames.push(a)
+          console.log("pushed ", a, "to allAltNames")
+        }
+      }
+      console.log("allAltNames gotten: ", allAltNames)
+      return allAltNames
+    }
+
+    // get all character names
+    function getAllCharacterNames() {
+      var allCharacterNames = []
+
+      for (let i in characters) {
+        allCharacterNames.push(cleanInput(characters[i].name))
+      }
+      return allCharacterNames
+    }
+
+    // get all characters in play
+    function getCharactersInPlay() {
+      const chars = new Set()
+
+      for (let name of validAnswers) {
+        const character = nameMap.get(name)
+        chars.add(cleanInput(character.name))
+      }
+
+      charactersInPlay = [...chars]
+
+      console.log("got charactersInPlay: ", charactersInPlay)
+      return charactersInPlay
+    }
+
+    // get remaining characters in play
+    function getRemainingCharactersInPlay() {
+      charactersInPlay = getCharactersInPlay()
+
+      var remainingCharactersInPlay = charactersInPlay.filter(name => !correctSubmissions.includes(name))
+
+      return remainingCharactersInPlay
+    }
+
+    // get universe
+    function getUniverse(name) {
+      var character = nameMap.get(name)
+
+      return character.universe
+    }
+
+    // get all active universes
+    function getActiveUniverses() {
+      activeUniverses = new Set([])
+      charactersInPlay = getCharactersInPlay()
+      for (let i of charactersInPlay) {
+        activeUniverses.add(getUniverse(i))
+      }
+      console.log("got activeUniverses: ", activeUniverses)
+      return activeUniverses
+    }
+
+    function getBonusCharacters() {
+      var bonusCharacters = (allCharacterNames.filter(name => !charactersInPlay.includes(name)))
+      return bonusCharacters
+    }
+
+    // yeah lets start makin a fuckin timer baybee
+    // timer fields
+    const timerHours = document.getElementById("timerHours")
+    const timerMinutes = document.getElementById("timerMinutes")
+    const timerSeconds = document.getElementById("timerSeconds")
+    const timerDiv = document.getElementById("timer")
+
+    function updateTimer(time) {
+      timerHours.innerText = String(time.h).padStart(2, "0")
+      timerMinutes.innerText = String(time.m).padStart(2, "0")
+      timerSeconds.innerText = String(time.s).padStart(2, "0")
+    }
+    let interval = null
+
+    function stopTimer() {
+      clearInterval(interval)
+      var finalTime = timerDiv.innerText
+      console.log("Final Time: ", finalTime)
+      return finalTime
+    }
+
+    function startCountup() {
+      var time = {
+        h: 00,
+        m: 00,
+        s: 00
+      }
+      var timeElapsed = 0
+
+      function updateTime() {
+        ++timeElapsed
+        time.s = timeElapsed % 60
+        time.m = Math.floor((timeElapsed % 3600) / 60)
+        time.h = Math.floor(timeElapsed / 3600)
+        updateTimer(time)
+      }
+      interval = setInterval(updateTime, 1000)
+      return timeElapsed
+    }
+
+    function startCountdown(n) {
+      var time = {
+        h: 00,
+        m: 00,
+        s: 00
+      }
+      var timeLeft = (n * 60)
+
+      function updateTime() {
+        --timeLeft
+        time.s = timeLeft % 60
+        time.m = Math.floor((timeLeft % 3600) / 60)
+        time.h = Math.floor(timeLeft / 3600)
+        updateTimer(time)
+        if (timeLeft <= 0) {
+          endGame("timeout")
+        }
+      }
+      interval = setInterval(updateTime, 1000)
+      return timeLeft
+    }
+
+    function startTimer(type, n) {
+      stopTimer()
+      updateTimer({
+        h: 00,
+        m: 00,
+        s: 00
+      })
+      if (type == "countdown") {
+        startCountdown(n)
+      } else if (type == "countup") {
+        startCountup()
+      } else {
+        console.log("Error! Invalid timer type in startTimer()!")
+      }
+    }
+
+    // get settings function
+
+    function getSettings() {
+      var timerType = null
+      var timerAmount = null
+      var disabledUniverses = []
+      if (!document.getElementById("enableKGM").checked) {
+        disabledUniverses.push("KakoGenzaiMirai")
+      }
+      if (!document.getElementById("enableFlitterverse").checked) {
+        disabledUniverses.push("Flitterverse")
+      }
+      if (!document.getElementById("enableEleventhHour").checked) {
+        disabledUniverses.push("Eleventh Hour")
+      }
+      if (!document.getElementById("enablePeriscopeSystems").checked) {
+        disabledUniverses.push("Periscope Systems")
+      }
+      if (!document.getElementById("enableManaweavers").checked) {
+        disabledUniverses.push("Manaweavers")
+      }
+      if (!document.getElementById("enableMetalworks").checked) {
+        disabledUniverses.push("Metalworks")
+      }
+      if (!document.getElementById("enableHueShift").checked) {
+        disabledUniverses.push("Hue Shift")
+      }
+      if (!document.getElementById("enableSylvolaia").checked) {
+        disabledUniverses.push("Sylvolaia")
+      }
+      if (!document.getElementById("enableArgentumAntipodes").checked) {
+        disabledUniverses.push("Argentum Antipodes")
+      }
+      if (!document.getElementById("enableTravelerverse").checked) {
+        disabledUniverses.push("Travelerverse")
+      }
+      if (!document.getElementById("enableRyva").checked) {
+        disabledUniverses.push("Ryva")
+      }
+      if (!document.getElementById("enableTUTA").checked) {
+        disabledUniverses.push("TUTA Multiverse")
+      }
+      if (!document.getElementById("enableMinecraft").checked) {
+        disabledUniverses.push("Minecraft")
+      }
+      if (!document.getElementById("enableOtherFandom").checked) {
+        disabledUniverses.push("Other Fandom")
+      }
+      if (!document.getElementById("enableMisc").checked) {
+        disabledUniverses.push("Miscellaneous Characters")
+      }
+
+      if (document.getElementById("timerInfinite").checked) {
+        timerType = "countup"
+      } else {
+        timerType = "countdown"
+        if (document.getElementById("timer15").checked) {
+          timerAmount = 15
+        } else if (document.getElementById("timer30").checked) {
+          timerAmount = 30
+        } else if (document.getElementById("timerHour").checked) {
+          timerAmount = 60
+        }
+      }
+      if (document.getElementById("imagesNone").checked) {
+        characterDisplay = "none"
+      } else if (document.getElementById("imagesColors").checked) {
+        characterDisplay = "colors"
+      } else if (document.getElementById("imagesGrayscale").checked) {
+        characterDisplay = "grayscale"
+      }
+
+      return {
+        allowAliases: document.getElementById("allowAliases").checked,
+        requireFullNames: document.getElementById("requireFullNames").checked,
+        requireDiacritics: document.getElementById("requireDiacritics").checked,
+        publicInfoOnly: document.getElementById("publicInfoOnly").checked,
+        noMinorCharacters: document.getElementById("noMinorCharacters").checked,
+        disabledUniverses: disabledUniverses,
+        timerType: timerType,
+        timerAmount: timerAmount,
+        characterDisplay: characterDisplay
+      }
+    }
+    // create valid answers list function
+    function buildValidAnswers(characters, settings) {
+      var validAnswers = []
+      console.log("buildValidAnswers running!")
+      for (let i in characters) {
+        const character = characters[i]
+        if (settings.disabledUniverses.includes(character.universe)) {
+          console.log("disabledUniverses includes ", character.name, "'s universe: ", settings.disabledUniverses.includes(character.universe))
+          continue
+        }
+        if (!character.hasInfo && settings.publicInfoOnly) {
+          continue
+        }
+        if (!character.isMajor && settings.noMinorCharacters) {
+          continue
+        }
+
+        if (settings.requireFullNames === true && character.hasFullName === true) {
+          if (settings.requireDiacritics) {
+            if (character.hasDiacritics) {
+              validAnswers.push(cleanInput(character.fullNameDiacritics))
+            } else {
+              validAnswers.push(cleanInput(character.fullName))
+            }
+          } else if (!settings.requireDiacritics) {
+            if (character.hasDiacritics) {
+              validAnswers.push(cleanInput(character.fullNameDiacritics))
+            } else {
+              console.log("full name pushed: ", character.fullName)
+              validAnswers.push(cleanInput(character.fullName))
+            }
+
+            console.log("validAnswers status: ", validAnswers)
+          }
+        } else {
+          if (settings.requireDiacritics && character.hasDiacritics) {
+            validAnswers.push(cleanInput(character.nameDiacritics))
+          } else {
+            console.log("name pushed: ", character.name)
+            validAnswers.push(cleanInput(character.name))
+          }
+          if (character.hasDiacritics && !validAnswers.includes(cleanInput(character.nameDiacritics))) {
+            validAnswers.push(cleanInput(character.nameDiacritics))
+          }
+          console.log("validAnswers status: ", validAnswers)
+          if (character.hasFullName) {
+            if (character.hasDiacritics && !validAnswers.includes(cleanInput(character.fullNameDiacritics))) {
+              validAnswers.push(cleanInput(character.fullNameDiacritics))
+            }
+            validAnswers.push(cleanInput(character.fullName))
+          }
+        }
+
+        if (settings.allowAliases === true && character.hasAliases === true) {
+          console.log("aliases pushed: ", character.aliases)
+          for (let i in character.aliases) {
+            validAnswers.push(cleanInput(character.aliases[i]))
+          }
+          console.log("validAnswers status: ", validAnswers)
+        }
+      }
+      return validAnswers
+    }
+
+    var gameState = "init"
+    // check answer and clear field when submitting an answer with enter key
+    gameInput.addEventListener("keydown", function(input) {
+      if (input.key === "Enter") {
+        checkAnswer(input)
+        gameInput.value = ''
+        var charactersInPlay = getCharactersInPlay()
+        if (charactersInPlay.length == correctSubmissions.length) {
+          console.log("You Won!")
+          endGame("win")
+        }
+      }
+    })
+
+    // initialize settings and validAnswers
+    function initializeAnswers() {
+      settings = getSettings()
+      validAnswers = buildValidAnswers(characters, settings)
+      return validAnswers
+    }
+
+
+    // UPDATE SETTINGS ON SETTINGS CHANGES
+    settingsFieldset.addEventListener("input", () => {
+      initializeAnswers()
+      charactersInPlay = getCharactersInPlay()
+      remainingCharactersInPlay = getRemainingCharactersInPlay()
+      activeUniverses = getActiveUniverses()
+      bonusCharacters = getBonusCharacters()
+      updateDebugInfo()
+      updateInfoDisplays()
+      generateCharacterGrid()
+    })
+
+    var gameActive = false
+    // start game function
+    function startGame() {
+      settings = getSettings()
+      validAnswers = initializeAnswers()
+      settingsFieldset.disabled = true
+      startTimer(settings.timerType, settings.timerAmount)
+      generateCharacterGrid()
+      gameActive = true
+      gameState = "active"
+    }
+    // end game function
+    function endGame(state) {
+      gameState = state
+      finalTime = stopTimer()
+      gameInput.disabled = true
+      showResults()
+      gameActive = false
+    }
+
+    function emojiBool(bool) {
+      if (bool) {
+        return "✅"
+      } else {
+        return "❌"
+      }
+    }
+
+    // define results screen fields
+    // build and show game results function
+    function showResults() {
+      // basic headers
+      if (gameState == "win") {
+        resultsHeader.innerText = "YOU WIN!"
+      } else if (gameState == "giveUp") {
+        resultsHeader.innerText = "You gave up..."
+      } else if (gameState == "timeout") {
+        resultsHeader.innerText = "You ran out of time..."
+      } else if (gameState == "lose") {
+        resultsHeader.innerText = "YOU DIED"
+      }
+
+      // final/remaining time checks and generation
+      if (settings.timerType == "countdown") {
+        resultsTimeLabel.innerText = "Time Remaining: "
+        resultsTime.innerText = (finalTime + "/" + "00:" + settings.timerAmount + ":00")
+        if (settings.timerAmount == 60) {
+          resultsTime.innerText = (finalTime + "/01:00:00")
+        }
+      } else {
+        resultsTimeLabel.innerText = "Final Time: "
+        resultsTime.innerText = finalTime
+      }
+
+      if (settings.characterDisplay == "none") {resultsSettingsDisplayType.innerText = "Question Marks" }
+        else if (settings.characterDisplay == "colors") {resultsSettingsDisplayType.innerText = "Colored Dots"}
+        else if (settings.characterDisplay == "grayscale") {resultsSettingsDisplayType.innerText = "Grayscale Icons"}
+
+
+      resultsNamedChars.innerText = correctSubmissions.length
+      resultsTotalChars.innerText = charactersInPlay.length
+      resultsMistakes.innerText = incorrectSubmissions.length
+      resultsBonus.innerText = submittedBonusCharacters.length
+      resultsBonusTotal.innerText = bonusCharacters.length
+
+      resultsSettingsAliases.innerText = emojiBool(settings.allowAliases)
+      resultsSettingsFullNames.innerText = emojiBool(settings.requireFullNames)
+      resultsSettingsDiacritics.innerText = emojiBool(settings.requireDiacritics)
+      resultsSettingsPublicInfo.innerText = emojiBool(settings.publicInfoOnly)
+
+      resultsUniverses.innerText = [...activeUniverses].join(", ")
+
+      togglePopup()
+    }
+
+    function copyResults() {
+      var resultHeader = ""
+      if (gameState == "win") {
+        resultHeader = ("named all the characters in " + finalTime + "!")
+      } else if (settings.timerType == "countdown" && gameState == "giveUp") {
+        resultHeader = ("gave up with " + finalTime + " remaining...")
+      } else if (settings.timerType == "countup" && gameState == "giveUp") {
+        resultHeader = ("gave up after " + finalTime + "...")
+      } else if (gameState == "timeout") {
+        resultHeader = "ran out of time..."
+      }
+      var copyableResults = ("**I " + resultHeader + "**\n" + resultsBody.innerText + "\nTake the quiz for yourself!\nhttps://verbina29.neocities.org/games/ocQuiz")
+      navigator.clipboard.writeText(copyableResults)
+      console.log("CopyableResults: ", copyableResults)
+      alert("Results copied!")
+    }
+
+    // do stuff on initial input into main field
+    let inputTouched = false
+    gameInput.addEventListener("input", () => {
+      if (!inputTouched) {
+        inputTouched = true
+        if (!gameActive) {
+          startGame()
+        }
+      }
+      return validAnswers
+    })
+
+    // define answer lists
+    function updateCorrectSubmissions(submission) {
+      correctSubmissions.push(submission)
+      return correctSubmissions
+    }
+
+    function updateIncorrectSubmissions(submission) {
+      incorrectSubmissions.push(submission)
+      return incorrectSubmissions
+    }
+    // this does in fact give remaining *answers*
+    var firstRemainingAnswersRun = true
+
+    function updateRemainingAnswers(submission) {
+      if (submission == null && firstRemainingAnswersRun == true) {
+        return validAnswers
+      }
+      const altNames = getAltNames(submission)
+      if (firstRemainingAnswersRun) {
+        remainingAnswers = validAnswers.filter(answer => answer !== submission && !altNames.includes(answer))
+        firstRemainingAnswersRun = false
+      } else {
+        remainingAnswers = remainingAnswers.filter(answer => answer !== submission && !altNames.includes(answer))
+      }
+      return remainingAnswers
+    }
+
+
+    // define debug info fields
+    // update debug info
+    function updateDebugInfo() {
+      debugIncorrectAnswers.innerText = [...incorrectSubmissions].join(", ")
+      debugCorrectAnswers.innerText = [...correctSubmissions].join(", ")
+      if (firstRemainingAnswersRun) {
+        debugRemainingAnswers.innerText = [...updateRemainingAnswers()].join(", ")
+      } else {
+        debugRemainingAnswers.innerText = [...remainingAnswers].join(", ")
+      }
+      debugValidNames.innerText = [...validAnswers].join(", ")
+      debugCharactersInPlay.innerText = [...charactersInPlay].join(", ")
+      debugRemainingCharactersInPlay.innerText = [...getRemainingCharactersInPlay()].join(", ")
+      debugUniversesInPlay.innerText = [...activeUniverses].join(', ')
+      debugAllBonus.innerText = [...bonusCharacters].join(", ")
+      debugBonusNamed.innerText = [...submittedBonusCharacters].join(", ")
+    }
+    // main update info displays function
+    function updateInfoDisplays() {
+      counterNamed.innerText = correctSubmissions.length
+      charactersInPlay = getCharactersInPlay()
+      counterTotal.innerText = charactersInPlay.length
+      var charactersRemaining = getRemainingCharactersInPlay()
+      counterRemaining.innerText = charactersRemaining.length
+
+      counterMistakes.innerText = incorrectSubmissions.length
+
+      counterBonus.innerText = submittedBonusCharacters.length
+      counterBonusTotal.innerText = bonusCharacters.length
+    }
+
+
+    // clean player input function
+    function cleanInput(input) {
+      if (Array.isArray(input)) {
+        var normalizedInput = []
+        for (let a of input) {
+          normalizedInput.push(a.toLowerCase().replace("the", "").trim())
+        }
+      } else if (typeof input == "string") {
+        var normalizedInput = input.toLowerCase().replace("the", "").trim()
+      }
+      return normalizedInput
+    }
+
+    // check answer function.
+    function checkAnswer(input) {
+      var submission = cleanInput(input.target.value)
+      var rawSubmission = input.target.value
+      console.log(submission, "is valid? ", validAnswers.includes(submission))
+      // actually check the answer and update lists of correct and incorrect answers
+      if (validAnswers.includes(submission) && !correctSubmissions.includes(submission)) {
+        updateCorrectSubmissions(rawSubmission)
+        remainingAnswers = updateRemainingAnswers(submission)
+        revealImage(submission)
+        console.log("called updateRemainingAnswers: ", remainingAnswers)
+      } else if (nameMap.has(submission)) {
+        const character = nameMap.get(submission)
+        const baseName = cleanInput(character.name)
+
+        if (bonusCharacters.includes(baseName) && !submittedBonusCharacters.includes(baseName)) {
+          if (settings.requireDiacritics && character.hasDiacritics && !settings.requireFullNames) {
+            if (!submission == cleanInput(character.nameDiacritics)) {
+              return
+            } else if (submission == cleanInput(character.nameDiacritics)) {
+              submittedBonusCharacters.push(baseName)
+            }
+          } else if (settings.requireDiacritics && character.hasDiacritics && settings.requireFullNames) {
+            if (!submission == cleanInput(character.fullNameDiacritics)) {
+              return
+            } else if (submission == cleanInput(character.fullNameDiacritics)) {
+              submittedBonusCharacters.push(baseName)
+            }
+          } else {
+            submittedBonusCharacters.push(baseName)
+          }
+        } else {
+          updateIncorrectSubmissions(rawSubmission)
+        }
+      } else if (!validAnswers.includes(submission) && !submittedBonusCharacters.includes(submission)) {
+        updateIncorrectSubmissions(rawSubmission)
+      } else if (correctSubmissions.includes(submission) || submittedBonusCharacters.includes(submission)) {
+        console.log("You already submitted that character!")
+      }
+
+      // update info displays
+      updateDebugInfo()
+      updateInfoDisplays()
+
+      // return a true or false for whether the answer was right or wrong, you get it
+      return validAnswers.includes(submission)
+    }
+    // define stuff for debug info toggle
+    // toggle debug info
+    debugCheckbox.addEventListener("change", function(e) {
+      if (e.currentTarget.checked) {
+        showElement(debugInfo)
+      } else {
+        hideElement(debugInfo)
+      }
+    })
+
+    // generate character grid function
+    function generateCharacterGrid() {
+      // i think that what we should do is loop through the universes, generate their divs, and then loop through the characters in play inside that loop to generate their divs.
+
+      // destroy children so that we always start with a clean slate
+      while (cgContainer.lastChild) {
+        cgContainer.removeChild(cgContainer.lastChild)
+      }
+
+      // loop through universes
+      for (let x of activeUniverses) {
+        const universeDiv = document.createElement("div")
+        universeDiv.id = (x.replaceAll(' ', '').toLowerCase() + "Div")
+        universeDiv.classList.add("cgUniverse")
+        cgContainer.appendChild(universeDiv)
+        const universeDivHeader = document.createElement("h2")
+        universeDiv.appendChild(universeDivHeader)
+        universeDivHeader.id = (x.replaceAll(' ', '').toLowerCase() + "Header")
+        universeDivHeader.classList.add("cgUniverseHeader")
+        universeDivHeader.innerText = x
+
+        // setup characters container
+        const charactersContainer = document.createElement("div")
+        charactersContainer.classList.add("cgCharactersContainer")
+        universeDiv.appendChild(charactersContainer)
+
+        // loop through characters in play
+        for (let y of charactersInPlay) {
+          // check against current working universe
+          if (getUniverse(y) == x) {
+            // generate generic character container
+            const characterDiv = document.createElement("div")
+            characterDiv.classList.add("cgCharacter")
+            characterDiv.id = (y.replaceAll(' ', '') + "Container")
+            charactersContainer.appendChild(characterDiv)
+            if (settings.characterDisplay == "grayscale") {
+              const characterImage = document.createElement("img")
+              characterImage.classList.add("cgImage")
+              characterImage.classList.add("cgUnrevealed")
+              characterImage.id = y.replaceAll(' ', '')
+              characterImage.src = nameMap.get(y).image
+              characterDiv.appendChild(characterImage)
+            } else if (settings.characterDisplay == "colors") {
+              const characterDot = document.createElement("span")
+              characterDot.classList.add("cgDot")
+              characterDot.id = y.replaceAll(' ', '')
+              characterDot.style.backgroundColor = nameMap.get(y).color
+              characterDiv.appendChild(characterDot)
+            } else if (settings.characterDisplay == "none") {
+              const characterImage = document.createElement("img")
+              characterImage.classList.add("cgImage")
+              characterImage.classList.add("cgUnrevealed")
+              characterImage.id = y.replaceAll(' ', '')
+              characterImage.src = "ocQuiz/unknown.PNG"
+              characterDiv.appendChild(characterImage)
+            }
+          }
+        }
+      }
+    }
+
+    function revealImage(submission) {
+      // this is the best way to handle the diacritics i think lmao
+      submission = cleanInput((nameMap.get(submission)).name)
+      // actually reveal the image
+      let characterContainer = document.getElementById((submission.replaceAll(' ', '') + "Container"))
+      const characterImage = document.createElement("img")
+      characterImage.classList.add("cgImage")
+      characterImage.id = submission.replaceAll(' ', '')
+      characterImage.src = nameMap.get(submission).image
+      // which i do by just deleting whatever is there and replacing it with the image
+      characterContainer.removeChild(characterContainer.firstChild)
+      characterContainer.appendChild(characterImage)
+    }
+
+    // boilerplate to show and hide elements
+    function showElement(element) {
+      element.style.display = "block"
+    }
+
+    function hideElement(element) {
+      element.style.display = "none"
+    }
+
+
+    // popup code basically stolen from w3schools we love w3schools
+
+    var popupContainer = document.getElementById("popupContainer")
+
+    var closePopup = document.getElementsByClassName("closePopup")[0]
+
+    function togglePopup() {
+      if (popupContainer.style.display == "none") {
+        popupContainer.style.display = "block"
+      } else if (popupContainer.style.display == "block") {
+        popupContainer.style.display = "none"
+      } else {
+        popupContainer.style.display = "block"
+      }
+    }
+
+    window.onclick = function(event) {
+      if (event.target == popupContainer) {
+        popupContainer.style.display = "none"
+      }
+    }
+  </script>
+</html>
