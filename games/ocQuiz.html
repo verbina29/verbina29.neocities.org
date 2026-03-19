@@ -152,7 +152,7 @@
           Characters Named: <span id="resultsNamedChars">X</span>/<span id="resultsTotalChars">X</span><br>
           Mistakes Made: <span id="resultsMistakes">0</span><br>
           Bonus Points: <span id="resultsBonus">0</span>/<span id=resultsBonusTotal>X</span><br>
-          Settings: Aliases?<span id="resultsSettingsAliases">❌</span> Full Names?<span id="resultsSettingsFullNames">❌</span> Diacritics?<span id="resultsSettingsDiacritics">❌</span> Has Info Only?<span id="resultsSettingsPublicInfo">❌</span><br>
+          Settings: Aliases?<span id="resultsSettingsAliases">❌</span> Full Names?<span id="resultsSettingsFullNames">❌</span> Diacritics?<span id="resultsSettingsDiacritics">❌</span> Has Info Only?<span id="resultsSettingsPublicInfo">❌</span> No Minor Characters?<span id="resultsSettingsMinorCharacters">❌</span><br>
           Character Display Type: <span id="resultsSettingsDisplayType">PLACEHOLDER VALUE</span><br>
           Universes Enabled: <span id="resultsUniverses">PLACEHOLDER VALUE</span>
         </p>
@@ -1168,6 +1168,7 @@
     const resultsSettingsDiacritics = document.getElementById("resultsSettingsDiacritics")
     const resultsSettingsPublicInfo = document.getElementById("resultsSettingsPublicInfo")
     const resultsSettingsDisplayType = document.getElementById("resultsSettingsDisplayType")
+    const resultsSettingsMinorCharacters = document.getElementById("resultsSettingsMinorCharacters")
     const resultsUniverses = document.getElementById("resultsUniverses")
     const debugCheckbox = document.getElementById("showDebugInfo")
     const debugInfo = document.getElementById("debugInfo")
@@ -1624,6 +1625,7 @@
       resultsSettingsFullNames.innerText = emojiBool(settings.requireFullNames)
       resultsSettingsDiacritics.innerText = emojiBool(settings.requireDiacritics)
       resultsSettingsPublicInfo.innerText = emojiBool(settings.publicInfoOnly)
+      resultsSettingsMinorCharacters.innerText = emojiBool(settings.noMinorCharacters)
 
       resultsUniverses.innerText = [...activeUniverses].join(", ")
 
