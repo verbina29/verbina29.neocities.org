@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>11h date calculator</title>
+    <meta content="eleventh hour date calculator" property="og:title" />
+    <meta content="my eleventh hour universe uses a fun calendar system that assigns colors to years and months and weeks and days. so this is a calculator for converting real dates into that calendar system. it's kinda like astrology but cooler and equally meaningless" property="og:description" />
+    <meta content="https://verbina29.neocities.org/toys/11hDateCalculator" property="og:url" />
+    <meta content="https://verbina29.neocities.org/embed_icon.gif" property="og:image" />
+    <meta content="#B60000" data-react-helmet="true" name="theme-color" />
+    <link rel="shortcut icon" href="https://verbina29.neocities.org/favicon.ico">
+
+    <link href="../theme_neo/neo.css" rel="stylesheet" type="text/css" media="all">
+  </head>
+  <body>
+    <header><h1>what do you mean this is all bullshit even in-universe</h1></header>
+    <nav><iframe class="navFrame" src="../navbar.html"></iframe></nav>
+
+    <div class="flex columns">
+      <section>
+        <h2>calendar lore calendar lore</h2>
+          <p>
+            eleventh hour's calendar is based on powers of 2 and themed around colors. Its year 0 is the year mana processing was discovered, so it's eras are AM and PM, standing for ante mana and post mana, the same as real life AM and PM but with mana. <span class="hoverable" title="I definitely didn't make it like this just so that Percival being a 12-hour clock and the universe being called eleventh hour would still make some amount of sense. Look they used to use 12-hour time. 23rd hour just doesn't have the same aura, okay?">(They use 24-hour time, so there's no confusion there.).</span> The years are 256 days, with 8 months in a year, 32 days in a month, 4 weeks in a month, and 8 days in a week. Most of the terms here are based on a cycle of colors, with the colors being red, orange, yellow, green, cyan, blue, purple, and "vivid", with vivid generally being a special case. For example, the vivid month has its own cycle through the colors, and the vivid day depends on the week and "colors" the week. Years have a color that syncs up with the vivid month, and there's also a second cycle of terms that goes every 8 years. A lot of the names here are fairly generic/obvious, so I might change some of them around later.
+          </p>
+          <p>
+            Since the calendar has all these fun color associations, it lends itself well to an astrology-like system. Of course, this is equally as bullshit in-universe as astrology is in real life. The average person in-universe is going to put almost no stock in any of this. Everything here is pretty up-to-interpretation, so the astrology reading part is just my personal interpretation. Coming up with your own interpretations is pretty fun, since it's mostly based on color theory. Most of the astrology info was completely bullshitted on the spot. I was originally going to have it be more of a write-up, but it's actually pretty hard to write out all that info so I switched gears to just brief lists. i did eventually start using a random character trait generator. but i did select ones that i think fit somewhat still okay.
+          </p>
+          <p>
+            Since the 11h calendar can't really map 1:1 onto the real calendar, some sacrifices have been made. 11h days greater than the number of days in the real month loop around back to 1, and IRL months above 8 alternate between being the 11h months 1-4 and 5-8 based on the year. As such, the mapping can't be 1:1, so converting a date back and forth doesn't always result in the same date. Years are kept the same, but the current year in 11h is 1101.
+          </p>
+      </section>
+      <main>
+        <h2>okay here's the actual calculator</h2>
+
+        <div class="centeredText">
+          Real Date ⇒ <input type="date" class="textInput" id="dateIRL" autocomplete=off></input> ⇄ <input class="textInput" id="date11h" autocomplete=off placeholder="dd/m/yyyy"></input> ⇐ 11h Date
+          <aside class="floatRightPure tertiary leftAlign">
+            <h3>"astrology" for this day :)</h3>
+
+            <p id="astrologyBody">
+            <p><b>Week Color: </b><span id="weekColor"></span></p>
+            <p><b>Day: </b><span id="dayColor"></span></p>
+            <p><b>Month: </b><span id="monthColor"></span></p>
+            <p><b>Year Vividity: </b><span id="yearVividity"></span></p>
+            <p><b>Year Color: </b><span id="yearColor"></span></p>
+            </p>
+            <div class="flex"><button class="button eleventhHourSmall" onclick="copyAstrology('full')">Copy (Full)</button> <button class="button eleventhHourSmall" onclick="copyAstrology('yearless')">Copy (Date Only)</button> <button class="button eleventhHourSmall" onclick="copyAstrology('yearOnly')">Copy (Year Only)</button></div>
+          </aside>
+          <br><br>
+          <div class="flex"><button class="button eleventhHourSmall" id="realTo11h" onclick="to11h()">real date to 11h</button> <button class="button eleventhHourSmall" id="11hToReal" onclick="toIRL()">11h to real date</button></div>
+          <p class="eleventhHourMedium">Full 11h Date: <span id="11hDateDisplay"></span></p>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>
+<script>
+
+const dateIRLinput = document.getElementById("dateIRL")
+const date11hInput = document.getElementById("date11h")
+const to11hButton = document.getElementById("realTo11h")
+const toRealButton = document.getElementById("11hToReal") // why can't variables start with a number, that's stupid.
+const infoYearColor = document.getElementById("yearColor")
+const infoYearVividity = document.getElementById("yearVividity")
+const infoMonthColor = document.getElementById("monthColor")
+const infoDay = document.getElementById("dayColor")
+const infoWeekColor = document.getElementById("weekColor")
+const dateDisplay11h = document.getElementById("11hDateDisplay")
+const astrologyBody = document.getElementById("astrologyBody")
+
+const yearColors = ["Red", "Orange", "Yellow", "Green", "Cyan", "Blue", "Purple", "White"]
+const yearVividTerms = ["Sanguine", "Fiery", "Sunny", "Verdant", "Calm", "Stormy", "Mystic", "Vivid"]
+const months = ["Hae", "Agni", "Gell", "Plancari", "Celes", "Aquis", "Miru", "vivid"]
+const vividMonths = ["Sangui", "Fier", "Sol", "Folia", "Alkere", "Saiwa", "Manna", "Vivere"]
+const days = ["Hayday", "Fuirday", "Gilday", "Planday", "Allday", "Mereday", "Hekday", "vivid"]
+const vividDays = ["Dyday", "Inoday", "Paleday", "Kelday"]
+const vividDayTerms = ["Black", "Gray", "White", "Vivid"]
+
+const astrologyOld = {
+  yearColor: {
+    Red: "Red years tend to be intense in some way. Those born in red years tend to be highly passionate and determined, but can be overly stubborn at times.",
+    Orange: "Orange years tend to be associated with warmth and optimism. As such, those born in orange years tend to be cheerful and positive, but they can be naive at times.",
+    Yellow: "Yellow years tend to be associated with rebirth and renewal. People born in yellow years tend to be creative and thoughtful, but they can also be fickle and easy to manipulate.",
+    Green: "Green years tend to be peaceful, but they're often overshadowed by the era they're in. People born in green years tend to be compassionate and kind, but can often be overlooked.",
+    Cyan: "Cyan years tend to be associated with nostalgia and the past. Despite this, people born in cyan years tend to find it easier to pick up new skills, but they can get lost in their own heads at times.", // i wrote this one for green originally but realized that 1101 is green and that doesn't work that well for it
+    Blue: "",
+    Purple: "Purple years are heavily associated with magic. After all, mana was discovered in a purple year. Outside of that, purple years have few distinct associations, giving them a somewhat mysterious identity. As such, those born in purple years tend to be wild cards.",
+    White: ""
+  },
+  yearVividTerm: {
+    Sanguine: "Sanguine times tend to be unpredictable. They can be some of the worst times, filled with strife and violence, but they can also be some of the best times. At their best, those born in sanguine times are lively, joyful, and carefree. At their worst, they can be aggressive and apathetic.",
+    Fiery: "",
+    Sunny: "",
+    Verdant: "",
+    Calm: "",
+    Stormy: "",
+    Mystic: "",
+    Vivid: ""
+  },
+  month: {
+    Hae: "",
+    Agni: "",
+    Gell: "",
+    Plancari: "",
+    Celes: "",
+    Aquis: "",
+    Miru: "",
+    Sangui: "",
+    Fier: "",
+    Sol: "",
+    Folia: "",
+    Alkere: "",
+    Saiwa: "",
+    Manna: "",
+    Vivere: ""
+  },
+  day: {
+    Hayday: "Hayday is often seen as a day for celebration, despite being the first weekday. Or maybe because of it. Of course, it also tends to have some loose associations with violence. Those born on a Hayday are frequently seen as either revelers and social butterflies, or, well, we'll say \"prime Knight material\", to be polite.",
+    Fuirday: "",
+    Gilday: "Gilday is often seen as a good day for business. Sales and business transactions alike often happen on Gildays, and some see it as lucky. Those born on a Gilday are often said to do well in the corporate world.",
+    Planday: "",
+    Allday: "",
+    Mereday: "",
+    Hekday: "Hekday is often associated with power and strength, but it's also often considered slightly unlucky. Those born on Hekday are often fascinating and unique people, but they can be isolated because of it.",
+    Dyday: "",
+    Inoday: "Inoday is often seen as peaceful. As a weekend, it's a good day to relax and destress. Those born on an Inoday are often seen as friendly, but are sometimes seen as slackers.",
+    Paleday: "",
+    Kelday: ""
+  },
+  vividDayTerm: {
+    Black: "Black weeks tend to be a bit low-energy, but they're also unpredictable. People born in a black week tend to be relaxed, but can be abrasive at times.",
+    Gray: "Gray weeks are said to be middling and neutral. They aren't particularly intense, but they aren't particularly good or bad either. People born in a gray week tend to be even-tempered, and a little boring.",
+    White: "White weeks tend to be more positive than the others, but they're also ",
+    Vivid: ""
+  }
+}
+
+const astrology = {
+  yearColor: {
+    Red: "intensity, passion, determination, stubbornness",
+    Orange: "warmth, optimism, cheeriness, positivity, naivete",
+    Yellow: "renewal, creativity, thoughtfulness, fickleness",
+    Green: "peacefulness, compassion, kindness, overshadowed and overlooked",
+    Cyan: "nostalgic, skillful, head in the clouds",
+    Blue: "reflection, complexity, adventurousness",
+    Purple: "magic, mystery, wildcard",
+    White: "change, duality, openmindedness"
+  },
+  yearVividTerm: {
+    Sanguine: "unpredictability, violence and strife, joyfulness, apathy",
+    Fiery: "destruction, impulsiveness, bravery",
+    Sunny: "cheerfulness, individuality, brilliance, overbearing",
+    Verdant: "defense, inexperience, balance",
+    Calm: "coolheaded, introverted, creative",
+    Stormy: "wildness, logic, distance",
+    Mystic: "breakthroughs, argumentativeness, intelligence",
+    Vivid: "freespirited, dangerous, trustworthy"
+  },
+  month: {
+    Hae: "revelry, airheadedness, artistic",
+    Agni: "extroversion, perfectionism, independence",
+    Gell: "superficiality, success, importance",
+    Plancari: "obedient, imaginative, mellow",
+    Celes: "witty, opportunistic, pedantic",
+    Aquis: "attentive, leaderly, scornful",
+    Miru: "absentminded, elegant, hardworking",
+    Sangui: "forgetfulness, aloofness, easy to please, admirable",
+    Fier: "egocentric, efficient, energetic",
+    Sol: "fortune, upbeatness, manipulability",
+    Folia: "quiet, professional, perceptive",
+    Alkere: "clever, uninhibited, self-reliant",
+    Saiwa: "shallow, mild-mannered, careful",
+    Manna: "practical, honest, clumsy",
+    Vivere: "capable, whimsical, overzealous"
+  },
+  day: {
+    Hayday: "celebration, violence, social butterflies, Knights",
+    Fuirday: "drama, passion, hotheadedness",
+    Gilday: "business, greed, luck, money",
+    Planday: "growth, thoroughness, plotting",
+    Allday: "knowledge, intelligence, arrogance",
+    Mereday: "calm, roughness, cruelty, relaxation, flow",
+    Hekday: "power, strength, misfortune, uniqueness, isolation",
+    Dyday: "cynicism, death, confidence, reality",
+    Inoday: "peace, relaxation, friendliness, slacking off",
+    Paleday: "purity, stagnation, emptiness",
+    Kelday: "change, colors, connection"
+  },
+  vividDayTerm: {
+    Black: "low-energy, unpredictable, abrasive, relaxed",
+    Gray: "neutrality, even-tempered, boring",
+    White: "positivity, naivete, interest",
+    Vivid: "energetic, creative, intensity"
+  }
+}
+
+var irlDate = {year: 0, month: 0, day: 0}
+var inputDate11h = {}
+var manualChangeEvent = new Event("change")
+
+function ordinalSuffixOf(i) { // i stole this function from stackoverflow https://stackoverflow.com/questions/13627308/add-st-nd-rd-and-th-ordinal-suffix-to-a-number
+    let j = i % 10,
+        k = i % 100;
+    if (j === 1 && k !== 11) {
+        return i + "st";
+    }
+    if (j === 2 && k !== 12) {
+        return i + "nd";
+    }
+    if (j === 3 && k !== 13) {
+        return i + "rd";
+    }
+    return i + "th";
+}
+function daysInMonth (month, year) { // also stolen from stackoverflow https://stackoverflow.com/questions/1184334/get-number-days-in-a-specified-month-using-javascript
+    return new Date(year, month, 0).getDate();
+}
+
+function dateConstructor11h(date11h) {
+  const splitDate = date11h.split("/")
+  console.log("dateConstructor11h splitDate: ", splitDate)
+
+  if (splitDate.length !== 3) {throw new Error("dateConstructor11h: Invalid format!")}
+  if (splitDate[0] === "" || splitDate[1] === "" || splitDate[2] === "") {throw new Error("dateConstructor11h: Blank date segment!")}
+
+  const day = Number(splitDate[0])
+  const month = Number(splitDate[1])
+  const year = Number(splitDate[2])
+
+  if (Number.isNaN(day) || Number.isNaN(month) || Number.isNaN(year)) {throw new Error("dateConstructor11h: NaN detected!")}
+  if (!Number.isInteger(day) || !Number.isInteger(month) || !Number.isInteger(year)) {throw new Error("dateConstructor11h: Non-integer date segment detected!")}
+
+  // handle invalid dates
+  if (day > 32) {throw new Error("dateConstructor11h: Day too large!")}
+  if (month > 8) {throw new Error("dateConstructor11h: Month too large!")}
+  if (day < 1) {throw new Error("dateConstructor11h: Day too small!")}
+  if (month < 1) {throw new Error("dateConstructor11h: Month too small!")}
+
+  // handle valid dates
+  var weekday = days[(day-1) % 8]
+  if (weekday == "vivid") {weekday = vividDays[Math.ceil(day / 8) - 1]}
+  const vividDayTerm = vividDayTerms[Math.ceil(day / 8) - 1]
+  var monthText = months[(month-1) % 8]
+  console.log("dateConstructor11h() year: ", year)
+  if (monthText == "vivid") {
+    monthText = vividMonths[
+      ((year + 6) % 8)
+      ]
+  }
+  console.log("dateConstructor11h() monthText: ", monthText)
+  const vividYearTerm = yearVividTerms[(Math.floor(year / 8) + 7) % 8]
+  const yearColor = yearColors[((year+6) % 8)]
+
+  const prettyDate = vividDayTerm + " " + weekday + " the " + ordinalSuffixOf(day) + " of " + monthText + ", " + year + ", " + vividYearTerm + " " + yearColor
+
+  return {
+    prettyDate: prettyDate,
+    prettyDateShort: "the " + ordinalSuffixOf(day) + " of " + monthText + ", " + year,
+    simpleDate: day + "/" + month + "/" + year,
+    yearlessDate: "the " + ordinalSuffixOf(day) + " of " + monthText,
+    yearOnly: year + ", " + vividYearTerm + " " + yearColor,
+
+    day: day,
+    dayText: weekday,
+    vividDayTerm: vividDayTerm,
+    month: month,
+    monthText: monthText,
+    year: year,
+    vividYearTerm: vividYearTerm,
+    yearColor: yearColor
+  }
+}
+
+dateIRLinput.addEventListener("change", () => {
+  var input = dateIRLinput.value
+  console.log("IRLDateListener Input: ", input)
+  var splitDateIRL = input.split("-")
+  irlDate.year = Number(splitDateIRL[0])
+  irlDate.month = Number(splitDateIRL[1])
+  irlDate.day = Number(splitDateIRL[2])
+  console.log("IRLdateListener Date: ", irlDate)
+})
+date11hInput.addEventListener("change", () => {
+  var input = date11hInput.value
+  console.log("11hInputListener Input: ", input)
+  var splitDate11h = input.split("/")
+  const year = Number(splitDate11h[2])
+  const month = Number(splitDate11h[1])
+  const day = Number(splitDate11h[0])
+  inputDate11h = dateConstructor11h(day + "/" + month + "/" + year)
+  dateDisplay11h.innerText = inputDate11h.prettyDate
+  updateAstrologyInfoPanel(inputDate11h)
+
+  console.log("11hInputListener Date: ", inputDate11h)
+})
+
+function to11h() {
+  const year = irlDate.year
+  const month = irlDate.month
+  let adjustedMonth
+  if (month > 8) {adjustedMonth = (month - 9) + 1 + (year % 2 ? 0 : 4)} else adjustedMonth = month
+  const day = irlDate.day
+  var newDate11h = dateConstructor11h(day + "/" + adjustedMonth + "/" + year)
+  date11hInput.value = newDate11h.simpleDate
+  dateDisplay11h.innerText = newDate11h.prettyDate
+  date11hInput.dispatchEvent(manualChangeEvent)
+
+  console.log("New 11h Date: ", newDate11h)
+  return newDate11h
+}
+
+function toIRL() { // you may ask why this one has so many more possible errors. *smiles*. guess.
+  if (!inputDate11h || typeof inputDate11h !== "object") {
+    throw new Error("toIRL(): Date is not object!")
+  }
+  if (Object.keys(inputDate11h).length === 0) {throw new Error("toIRL(): Date object is empty!")}
+  console.log("inputDate11h from toIRL(): ", inputDate11h)
+
+  const year = inputDate11h.year
+  const month = inputDate11h.month
+  const day = inputDate11h.day
+  let adjustedDay = (day % daysInMonth(month, year))
+
+  if (!Number.isInteger(day) || !Number.isInteger(month) || !Number.isInteger(year)) {console.log("toIRL() non-integer date inputDate11h: ", inputDate11h); throw new Error("toIRL(): Non-integer date segments!"); }
+
+  var newIRLdate = String(year).padStart(4, "0") + "-" + String(month).padStart(2, "0") + "-" + String(adjustedDay).padStart(2, "0")
+  dateIRLinput.value = newIRLdate
+  dateIRLinput.dispatchEvent(manualChangeEvent)
+
+  console.log("toIRL() New IRL Date: ", newIRLdate)
+  return newIRLdate
+}
+
+function getAstrology(category, val) {
+  const astrologyCategory = astrology[category]
+  return astrologyCategory[val]
+}
+
+function date11hToAstrology(date11h) {
+  const day = date11h.dayText
+  const month = date11h.monthText
+  const vividDayTerm = date11h.vividDayTerm
+  const yearVividTerm = date11h.vividYearTerm
+  const yearColor = date11h.yearColor
+
+  return {
+    day: getAstrology("day", day),
+    month: getAstrology("month", month),
+    vividDayTerm: getAstrology("vividDayTerm", vividDayTerm),
+    yearVividTerm: getAstrology("yearVividTerm", yearVividTerm),
+    yearColor: getAstrology("yearColor", yearColor)
+  }
+}
+
+function updateAstrologyInfoPanel(date11h) {
+  astrologies = date11hToAstrology(date11h)
+
+  infoWeekColor.innerText = astrologies.vividDayTerm
+  infoDay.innerText = astrologies.day
+  infoMonthColor.innerText = astrologies.month
+  infoYearVividity.innerText = astrologies.yearVividTerm
+  infoYearColor.innerText = astrologies.yearColor
+}
+
+function copyAstrology(type) {
+  var copyableHeader = ""
+  var copyableMain = ""
+  if (type === "full") {
+    copyableHeader = "# 11h astrology for " + inputDate11h.prettyDateShort
+    copyableMain = astrologyBody.innerText
+  } else if (type === "yearless") {
+    copyableHeader = "# 11h astrology for " + inputDate11h.yearlessDate
+    copyableMain = "Week Color: " + infoWeekColor.innerText + "\n" + "Day: " + infoDay.innerText + "\n" + "Month: " + infoMonthColor.innerText
+  } else if (type === "yearOnly") {
+    copyableHeader = "# 11h astrology for the year " + inputDate11h.year
+    copyableMain = "Year Vividity: " + infoYearVividity.innerText + "\n" + "Year Color: " + infoYearColor.innerText
+  } else {throw new Error("copyAstrology(): Invalid type!")}
+
+  var copyable = copyableHeader + "\n" + copyableMain + "\n\nGet your own bullshit made-up astrology reading at: https://verbina29.neocities.org/toys/11hDateCalculator"
+  navigator.clipboard.writeText(copyable)
+  alert("Copied!")
+}
+
+</script>

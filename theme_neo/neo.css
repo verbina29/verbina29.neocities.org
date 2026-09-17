@@ -69,6 +69,7 @@
 }
 aside {
     flex: 15%;
+    max-width: 30%;
 }
 .centeredText {
     text-align: center;
@@ -137,6 +138,20 @@ main, .main {
 .floatLeft {
     float: left;
     margin-right: 10px;
+}
+.floatRight {
+    float: right;
+    margin-left: 10px;
+}
+.floatLeftPure {
+    float: left;
+    margin-left: 0;
+    margin-bottom: 0;
+}
+.floatRightPure {
+    float: right;
+    margin-right: 0;
+    margin-bottom: 0;
 }
 .headerNop { /* why did i call it that??? */
     margin-bottom: 20px;
@@ -482,6 +497,19 @@ code {
     --linkColorVisited: var(--textColorBlack);
 }
 
+.base {
+    background-color: var(--backgroundBase);
+}
+.secondary {
+    background-color: var(--backgroundSecondary);
+}
+.tertiary {
+    background-color: var(--backgroundTertiary);
+}
+.quaternary {
+    background-color: var(--backgroundQuaternary);
+}
+
 /* cool and fun new stuff i'm adding */
 
 .vertical-bar {
@@ -610,6 +638,10 @@ input {
     margin-top: 4px;
 }
 .textInput::placeholder {
+    color: var(--hintColor);
+    font-family: Raleway, sans-serif;
+}
+input[type=date] {
     color: var(--hintColor);
     font-family: Raleway, sans-serif;
 }
